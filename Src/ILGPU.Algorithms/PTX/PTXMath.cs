@@ -112,7 +112,7 @@ namespace ILGPU.Algorithms.PTX
         /// <summary cref="XMath.Sqrt(double)" />
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sqrt(double value) =>
-            XMath.Sqrt((float)value);
+            throw new NotImplementedException();
 
         /// <summary cref="XMath.Sqrt(float)" />
         public static float Sqrt(float value) =>
@@ -121,7 +121,7 @@ namespace ILGPU.Algorithms.PTX
         /// <summary cref="XMath.Rsqrt(double)" />
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Rsqrt(double value) =>
-            XMath.Rcp(Sqrt(value));
+            XMath.Rcp(XMath.Sqrt(value));
 
         /// <summary cref="XMath.Rsqrt(float)" />
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

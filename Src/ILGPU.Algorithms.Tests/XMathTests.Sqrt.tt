@@ -13,13 +13,13 @@ using Xunit;
     var sqrtFunctions = new []
     {
         new XMathFunction("Sqrt" , "float" , new Precision(15, 15,  5)),
-        new XMathFunction("Sqrt" , "double", new Precision(15,  6, 15)),
+        new XMathFunction("Sqrt" , "double", new Precision(15, 15, 15)),
     };
 
     var rsqrtFunctions = new []
     {
         new XMathFunction("Rsqrt" , "float" , new Precision(15, 15,  7)),
-        new XMathFunction("Rsqrt" , "double", new Precision(15,  7, 15)),
+        new XMathFunction("Rsqrt" , "double", new Precision(15, 15, 15)),
     };
 #>
 namespace ILGPU.Algorithms.Tests
