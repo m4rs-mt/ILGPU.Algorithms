@@ -11,15 +11,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{A374B733
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ILGPU.Algorithms", "ILGPU.Algorithms\ILGPU.Algorithms.csproj", "{89B89E70-2720-4069-B0FD-50E6A2AE30E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ILGPU.Algorithms.Tests", "ILGPU.Algorithms.Tests\ILGPU.Algorithms.Tests.csproj", "{DA2F560D-FED2-4D87-B10B-B74EABD9512C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ILGPU.Algorithms.Tests", "ILGPU.Algorithms.Tests\ILGPU.Algorithms.Tests.csproj", "{DA2F560D-FED2-4D87-B10B-B74EABD9512C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{48551B26-0126-4171-A878-27372D05D1BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ILGPU.Algorithms.Tests.CPU", "ILGPU.Algorithms.Tests.CPU\ILGPU.Algorithms.Tests.CPU.csproj", "{E4FC7717-F619-4ED5-A008-860FFB8AF568}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ILGPU.Algorithms.Tests.CPU", "ILGPU.Algorithms.Tests.CPU\ILGPU.Algorithms.Tests.CPU.csproj", "{E4FC7717-F619-4ED5-A008-860FFB8AF568}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ILGPU.Algorithms.Tests.Cuda", "ILGPU.Algorithms.Tests.Cuda\ILGPU.Algorithms.Tests.Cuda.csproj", "{99189BD9-6604-4278-BE6C-F9FE70BCADB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ILGPU.Algorithms.Tests.Cuda", "ILGPU.Algorithms.Tests.Cuda\ILGPU.Algorithms.Tests.Cuda.csproj", "{99189BD9-6604-4278-BE6C-F9FE70BCADB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ILGPU.Algorithms.Tests.OpenCL", "ILGPU.Algorithms.Tests.OpenCL\ILGPU.Algorithms.Tests.OpenCL.csproj", "{7FD1337D-2CD4-4DF3-804E-DFFD56F1EBFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ILGPU.Algorithms.Tests.OpenCL", "ILGPU.Algorithms.Tests.OpenCL\ILGPU.Algorithms.Tests.OpenCL.csproj", "{7FD1337D-2CD4-4DF3-804E-DFFD56F1EBFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

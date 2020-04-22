@@ -258,6 +258,11 @@ Src/ILGPU.Algorithms/TypeInformation.cs
 
 # Generated test source files
 Src/ILGPU.Algorithms.Tests/Generic/ConfigurationBase.cs
+Src/ILGPU.Algorithms.Tests/XMathTests.Log.cs
+Src/ILGPU.Algorithms.Tests/XMathTests.Pow.cs
+Src/ILGPU.Algorithms.Tests/XMathTests.Rcp.cs
+Src/ILGPU.Algorithms.Tests/XMathTests.Sqrt.cs
+Src/ILGPU.Algorithms.Tests/XMathTests.Trig.cs
 
 Src/ILGPU.Algorithms.Tests.CPU/Configurations.cs
 Src/ILGPU.Algorithms.Tests.Cuda/Configurations.cs

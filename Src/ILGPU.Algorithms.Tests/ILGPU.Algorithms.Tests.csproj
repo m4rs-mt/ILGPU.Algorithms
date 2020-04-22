@@ -28,6 +28,26 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ConfigurationBase.cs</LastGenOutput>
     </None>
+    <None Update="XMathTests.Log.tt">
+      <LastGenOutput>XMathTests.Log.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="XMathTests.Pow.tt">
+      <LastGenOutput>XMathTests.Pow.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="XMathTests.Rcp.tt">
+      <LastGenOutput>XMathTests.Rcp.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="XMathTests.Sqrt.tt">
+      <LastGenOutput>XMathTests.Sqrt.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="XMathTests.Trig.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>XMathTests.Trig.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +59,31 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ConfigurationBase.tt</DependentUpon>
+    </Compile>
+    <Compile Update="XMathTests.Log.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>XMathTests.Log.tt</DependentUpon>
+    </Compile>
+    <Compile Update="XMathTests.Pow.cs">
+      <DependentUpon>XMathTests.Pow.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="XMathTests.Rcp.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>XMathTests.Rcp.tt</DependentUpon>
+    </Compile>
+    <Compile Update="XMathTests.Sqrt.cs">
+      <DependentUpon>XMathTests.Sqrt.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="XMathTests.Trig.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>XMathTests.Trig.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

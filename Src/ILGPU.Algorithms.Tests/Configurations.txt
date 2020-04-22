@@ -1,1 +1,1 @@
-﻿
+﻿XMathTests: Debug, Release
