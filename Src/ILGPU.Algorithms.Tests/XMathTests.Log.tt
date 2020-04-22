@@ -14,8 +14,8 @@ using Xunit;
     {
         new XMathFunction("Log"  , "float" , new Precision(15,  6,  6)),
         new XMathFunction("Log"  , "double", new Precision(15,  6, 15)),
-        new XMathFunction("Log10", "float" , new Precision(15, 15,  6)),
-        new XMathFunction("Log10", "double", new Precision(15, 15, 15)),
+        new XMathFunction("Log10", "float" , new Precision(15,  6,  6)),
+        new XMathFunction("Log10", "double", new Precision(15,  6, 15)),
     };
 
     var unaryLog2Functions = new []
@@ -61,16 +61,6 @@ namespace ILGPU.Algorithms.Tests
             using var output = Accelerator.Allocate<<#= function.DataType #>>(inputArray.Length);
 
             input.CopyFrom(inputArray, 0, 0, inputArray.Length);
-
-<# if (function.Name == "Log10") { #>
-            if (Accelerator.AcceleratorType == AcceleratorType.Cuda)
-            {
-                // TODO: Fix Cuda implementation of XMath.Log10(<#= function.DataType #>)
-                Assert.False(false, "ILGPU implementation error");
-                return;
-            }
-<# } #>
-
             Execute(input.Length, input.View, output.View);
 
             var expected = inputArray.Select(x => Math<#= function.MathSuffix #>.<#= function.Name #>(x)).ToArray();

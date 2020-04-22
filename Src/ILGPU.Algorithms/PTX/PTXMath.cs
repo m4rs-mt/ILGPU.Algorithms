@@ -394,12 +394,12 @@ namespace ILGPU.Algorithms.PTX
         /// <summary cref="XMath.Log10(double)" />
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Log10(double value) =>
-            Log2(value) * XMath.OneOverLn10;
+            Log(value) * XMath.OneOverLn10;
 
         /// <summary cref="XMath.Log10(float)" />
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Log10(float value) =>
-            XMath.Log2(value) * XMath.OneOverLn10;
+            XMath.Log(value) * XMath.OneOverLn10;
 
         /// <summary cref="XMath.Log2(double)" />
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
