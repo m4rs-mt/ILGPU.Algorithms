@@ -24,7 +24,7 @@ namespace ILGPU.Algorithms.CL
 
         /// <summary>
         /// Generates intrinsic math instructions for the following kinds:
-        /// Rcp, Sqrt, Sin, Cos, Exp2, Log2, IsInf, IsNaN
+        /// Rcp
         /// </summary>
         /// <param name="backend">The current backend.</param>
         /// <param name="codeGenerator">The code generator.</param>

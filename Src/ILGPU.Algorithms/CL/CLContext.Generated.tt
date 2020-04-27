@@ -17,7 +17,11 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 <#
-var unaryMathFunctions = UnaryMathFunctions;
+var unaryMathFunctions = new ValueTuple<string, Type, string, string>[]
+    {
+        UnaryMathFunctions[18], // Rcp
+        UnaryMathFunctions[19], // Rcp
+    };
 var binaryMathFunctions = BinaryMathFunctions;
 #>
 using ILGPU.IR.Intrinsics;
