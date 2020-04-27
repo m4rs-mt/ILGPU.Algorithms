@@ -35,19 +35,58 @@ namespace ILGPU.Algorithms.CL
             Value value)
         {
             var arithmeticValue = value as UnaryArithmeticValue;
-            var instruction = CLInstructions.GetArithmeticOperation(
-                arithmeticValue.Kind,
-                arithmeticValue.BasicValueType.IsFloat(),
-                out _);
-
             var argument = codeGenerator.Load(arithmeticValue.Value);
-            var targetRegister = codeGenerator.Allocate(arithmeticValue);
-            using (var command = codeGenerator.BeginStatement(targetRegister, instruction))
+            var target = codeGenerator.Allocate(arithmeticValue);
+            var isFloat = arithmeticValue.BasicValueType.IsFloat();
+            if (arithmeticValue.Kind == UnaryArithmeticKind.RcpF && isFloat)
             {
-                command.BeginArguments();
-                command.AppendAtomicCast(arithmeticValue.ArithmeticBasicValueType);
-                command.AppendArgument(argument);
-                command.EndArguments();
+                // Manually generate code for "1.0 / argument"
+                var constant = arithmeticValue.BasicValueType == BasicValueType.Float32 ? 1.0f : 1.0;
+                var operation = CLInstructions.GetArithmeticOperation(BinaryArithmeticKind.Div, isFloat, out var isFunction);
+                using (var statement = codeGenerator.BeginStatement(target))
+                {
+                    statement.AppendCast(arithmeticValue.ArithmeticBasicValueType);
+                    if (isFunction)
+                    {
+                        statement.AppendCommand(operation);
+                        statement.BeginArguments();
+                    }
+                    else
+                        statement.OpenParen();
+
+                    statement.AppendCast(arithmeticValue.ArithmeticBasicValueType);
+                    statement.AppendConstant(constant);
+
+                    if (!isFunction)
+                        statement.AppendCommand(operation);
+
+                    statement.AppendArgument();
+                    statement.AppendCast(arithmeticValue.ArithmeticBasicValueType);
+                    statement.Append(argument);
+
+                    if (isFunction)
+                        statement.EndArguments();
+                    else
+                        statement.CloseParen();
+                }
+            }
+            else
+            {
+                var operation = CLInstructions.GetArithmeticOperation(arithmeticValue.Kind, isFloat, out var isFunction);
+                using (var statement = codeGenerator.BeginStatement(target))
+                {
+                    statement.AppendCast(arithmeticValue.ArithmeticBasicValueType);
+
+                    if (isFunction)
+                        statement.AppendCommand(operation);
+                    statement.BeginArguments();
+                    if (!isFunction)
+                        statement.AppendCommand(operation);
+
+                    statement.AppendCast(arithmeticValue.ArithmeticBasicValueType);
+                    statement.AppendArgument(argument);
+                    statement.EndArguments();
+                }
             }
         }
 
@@ -78,12 +117,12 @@ namespace ILGPU.Algorithms.CL
         /// <summary cref="XMath.Rcp(double)" />
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Rcp(double value) =>
-            1.0 / value;
+            throw new NotImplementedException();
 
         /// <summary cref="XMath.Rcp(float)" />
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Rcp(float value) =>
-            1.0f / value;
+            throw new NotImplementedException();
 
         #endregion
 
