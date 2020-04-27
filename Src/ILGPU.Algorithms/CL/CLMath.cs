@@ -34,59 +34,40 @@ namespace ILGPU.Algorithms.CL
             CLCodeGenerator codeGenerator,
             Value value)
         {
+            // Manually generate code for "1.0 / argument"
             var arithmeticValue = value as UnaryArithmeticValue;
             var argument = codeGenerator.Load(arithmeticValue.Value);
             var target = codeGenerator.Allocate(arithmeticValue);
-            var isFloat = arithmeticValue.BasicValueType.IsFloat();
-            if (arithmeticValue.Kind == UnaryArithmeticKind.RcpF && isFloat)
+            var constant = arithmeticValue.BasicValueType == BasicValueType.Float32 ? 1.0f : 1.0;
+            var operation = CLInstructions.GetArithmeticOperation(
+                BinaryArithmeticKind.Div,
+                arithmeticValue.BasicValueType.IsFloat(),
+                out var isFunction);
+            using (var statement = codeGenerator.BeginStatement(target))
             {
-                // Manually generate code for "1.0 / argument"
-                var constant = arithmeticValue.BasicValueType == BasicValueType.Float32 ? 1.0f : 1.0;
-                var operation = CLInstructions.GetArithmeticOperation(BinaryArithmeticKind.Div, isFloat, out var isFunction);
-                using (var statement = codeGenerator.BeginStatement(target))
+                statement.AppendCast(arithmeticValue.ArithmeticBasicValueType);
+                if (isFunction)
                 {
-                    statement.AppendCast(arithmeticValue.ArithmeticBasicValueType);
-                    if (isFunction)
-                    {
-                        statement.AppendCommand(operation);
-                        statement.BeginArguments();
-                    }
-                    else
-                        statement.OpenParen();
-
-                    statement.AppendCast(arithmeticValue.ArithmeticBasicValueType);
-                    statement.AppendConstant(constant);
-
-                    if (!isFunction)
-                        statement.AppendCommand(operation);
-
-                    statement.AppendArgument();
-                    statement.AppendCast(arithmeticValue.ArithmeticBasicValueType);
-                    statement.Append(argument);
-
-                    if (isFunction)
-                        statement.EndArguments();
-                    else
-                        statement.CloseParen();
-                }
-            }
-            else
-            {
-                var operation = CLInstructions.GetArithmeticOperation(arithmeticValue.Kind, isFloat, out var isFunction);
-                using (var statement = codeGenerator.BeginStatement(target))
-                {
-                    statement.AppendCast(arithmeticValue.ArithmeticBasicValueType);
-
-                    if (isFunction)
-                        statement.AppendCommand(operation);
+                    statement.AppendCommand(operation);
                     statement.BeginArguments();
-                    if (!isFunction)
-                        statement.AppendCommand(operation);
-
-                    statement.AppendCast(arithmeticValue.ArithmeticBasicValueType);
-                    statement.AppendArgument(argument);
-                    statement.EndArguments();
                 }
+                else
+                    statement.OpenParen();
+
+                statement.AppendCast(arithmeticValue.ArithmeticBasicValueType);
+                statement.AppendConstant(constant);
+
+                if (!isFunction)
+                    statement.AppendCommand(operation);
+
+                statement.AppendArgument();
+                statement.AppendCast(arithmeticValue.ArithmeticBasicValueType);
+                statement.Append(argument);
+
+                if (isFunction)
+                    statement.EndArguments();
+                else
+                    statement.CloseParen();
             }
         }
 
