@@ -236,4 +236,9 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Generic\" />
+  </ItemGroup>
+
+  <Import Project="..\..\ILGPU\Src\TextTransform.targets" />
 </Project>
