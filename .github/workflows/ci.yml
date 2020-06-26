@@ -31,11 +31,6 @@ jobs:
         run: dotnet build --configuration=Release -p:TreatWarningsAsErrors=true Src
       - name: CPU Tests
         run: dotnet test --configuration=Release ./Src/ILGPU.Algorithms.Tests.CPU
-      - name: Set up NuGet
-        if: runner.os == 'Windows'
-        uses: nuget/setup-nuget@v1
-        with:
-          nuget-version: '5.x'
       - name: Create NuGet package
         if: runner.os == 'Windows'
         run: dotnet pack --configuration=Release  Src
