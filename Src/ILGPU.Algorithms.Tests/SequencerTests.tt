@@ -7,7 +7,6 @@
 using ILGPU.Tests;
 using ILGPU.Runtime;
 using ILGPU.Algorithms.Sequencers;
-using System;
 using Xunit;
 using Xunit.Abstractions;
 

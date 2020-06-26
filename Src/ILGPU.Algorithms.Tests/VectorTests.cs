@@ -1,8 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Data.SqlTypes;
-using System.Numerics;
-using ILGPU.Algorithms.Sequencers;
+﻿using System.Numerics;
 using ILGPU.Runtime;
 using ILGPU.Tests;
 using Xunit;

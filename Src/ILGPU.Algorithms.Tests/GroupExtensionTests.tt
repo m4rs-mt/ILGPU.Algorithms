@@ -7,6 +7,7 @@
 using ILGPU.Runtime;
 using ILGPU.Tests;
 using ILGPU.Algorithms.ScanReduceOperations;
+using System;
 using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
@@ -24,6 +25,7 @@ namespace ILGPU.Algorithms.Tests
 
 <#
         var types = SignedIntTypes.Skip(2).Concat(UnsignedIntTypes.Skip(2)).Concat(FloatTypes).ToArray();
+        int[] fractions = { 1, 2, 4};
 #>
         #region Kernel implementation
 
@@ -48,21 +50,24 @@ namespace ILGPU.Algorithms.Tests
 <#
         foreach (var srOp in ScanReduceOperations) {
 #>
-        public static TheoryData<object, object, object, object, object> <#= srOp.Name #>TestData =>
-            new TheoryData<object, object, object, object, object>
+        public static TheoryData<object, object, object, object, object, object> <#= srOp.Name #>TestData =>
+            new TheoryData<object, object, object, object, object, object>
         {
+            // Type, ScanReduceOperation, Sequencer, Start of Sequence, StepSize of Sequence, Fraction of Size
 <#
             foreach (var type in types) {
+                foreach (var frac in fractions) {
 #>
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, 0 },
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 1, 0 },
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, 1 },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, 0, <#= frac #> },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 1, 0, <#= frac #> },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, 1, <#= frac #> },
 <#
                 if(type.IsUnsignedInt) { continue; }
 #>
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), -1, 0 },
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, -1 },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), -1, 0, <#= frac #> },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, -1, <#= frac #> },
 <#
+                }
             }
 #>
         };
@@ -82,12 +87,13 @@ namespace ILGPU.Algorithms.Tests
             TFunction func,
             TSequencer sequencer,
             T start,
-            T stepSize)
+            T stepSize,
+            int fraction)
             where T : unmanaged
             where TFunction : unmanaged, IScanReduceOperation<T>
             where TSequencer : struct, ITestSequencer<T>
         {
-            var size = Accelerator.MaxNumThreadsPerGroup;
+            var size = Math.Max(Accelerator.MaxNumThreadsPerGroup / fraction, 1);
             using var input = Accelerator.Allocate<T>(size);
             using var output = Accelerator.Allocate<T>(size);
             using var stream = Accelerator.CreateStream();
@@ -112,12 +118,13 @@ namespace ILGPU.Algorithms.Tests
             TFunction func,
             TSequencer sequencer,
             T start,
-            T stepSize)
+            T stepSize,
+            int fraction)
             where T : unmanaged
             where TFunction : unmanaged, IScanReduceOperation<T>
             where TSequencer : struct, ITestSequencer<T>
         {
-            var size = Accelerator.MaxNumThreadsPerGroup;
+            var size = Math.Max(Accelerator.MaxNumThreadsPerGroup / fraction, 1);
             using var input = Accelerator.Allocate<T>(size);
             using var output = Accelerator.Allocate<T>(size);
             using var stream = Accelerator.CreateStream();
@@ -139,12 +146,13 @@ namespace ILGPU.Algorithms.Tests
             TFunction func,
             TSequencer sequencer,
             T start,
-            T stepSize)
+            T stepSize,
+            int fraction)
             where T : unmanaged
             where TFunction : unmanaged, IScanReduceOperation<T>
             where TSequencer : struct, ITestSequencer<T>
         {
-            var size = Accelerator.MaxNumThreadsPerGroup;
+            var size = Math.Max(Accelerator.MaxNumThreadsPerGroup / fraction, 1);
             using var input = Accelerator.Allocate<T>(size);
             using var output = Accelerator.Allocate<T>(size);
             using var stream = Accelerator.CreateStream();
@@ -167,12 +175,13 @@ namespace ILGPU.Algorithms.Tests
             TFunction func,
             TSequencer sequencer,
             T start,
-            T stepSize)
+            T stepSize,
+            int fraction)
             where T : unmanaged
             where TFunction : unmanaged, IScanReduceOperation<T>
             where TSequencer : struct, ITestSequencer<T>
         {
-            var size = Accelerator.MaxNumThreadsPerGroup;
+            var size = Math.Max(Accelerator.MaxNumThreadsPerGroup / fraction, 1);
             using var input = Accelerator.Allocate<T>(size);
             using var output = Accelerator.Allocate<T>(size);
             using var stream = Accelerator.CreateStream();
@@ -196,12 +205,13 @@ namespace ILGPU.Algorithms.Tests
             TFunction func,
             TSequencer sequencer,
             T start,
-            T stepSize)
+            T stepSize,
+            int fraction)
             where T : unmanaged
             where TFunction : unmanaged, IScanReduceOperation<T>
             where TSequencer : struct, ITestSequencer<T>
         {
-            var size = Accelerator.MaxNumThreadsPerGroup;
+            var size = Math.Max(Accelerator.MaxNumThreadsPerGroup / fraction, 1);
             using var input = Accelerator.Allocate<T>(size);
             using var output = Accelerator.Allocate<T>(size);
             using var stream = Accelerator.CreateStream();

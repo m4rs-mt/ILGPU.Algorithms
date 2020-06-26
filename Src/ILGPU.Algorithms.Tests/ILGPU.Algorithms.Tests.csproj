@@ -7,9 +7,12 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\..\ILGPU\Src\ILGPU.Tests\Generic\AssemblyAttributes.cs" Link="Generic\AssemblyAttributes.cs" />
-    <Compile Include="..\..\ILGPU\Src\ILGPU.Tests\Generic\TestData.cs" Link="Generic\TestData.cs" />
   </ItemGroup>
 
   <ItemGroup>

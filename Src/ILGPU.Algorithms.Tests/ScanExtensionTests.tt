@@ -6,7 +6,6 @@
 
 using ILGPU.Tests;
 using ILGPU.Runtime;
-using ILGPU.Algorithms.Sequencers;
 using ILGPU.Algorithms.ScanReduceOperations;
 using System.Linq;
 using Xunit;

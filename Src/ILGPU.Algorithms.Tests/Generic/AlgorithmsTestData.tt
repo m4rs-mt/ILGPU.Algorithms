@@ -6,7 +6,6 @@
 
 using ILGPU.Algorithms.RadixSortOperations;
 using ILGPU.Algorithms.ScanReduceOperations;
-using ILGPU.Algorithms.Sequencers;
 using System.Runtime.CompilerServices;
 using Xunit.Abstractions;
 
@@ -40,7 +39,7 @@ namespace ILGPU.Algorithms.Tests
         public override string ToString() => Value.ToString();
     }
 
-    #region Xunit Sequencer
+    #region Xunit Sequencer Structures
 
     public interface ITestSequencer<T> : IXunitSerializable
     {
@@ -101,7 +100,7 @@ namespace ILGPU.Algorithms.Tests
 
     #endregion
 
-    #region Xunit ScanReduceOperation
+    #region Xunit ScanReduceOperation Structures
 
 <#
     foreach (var type in types) {
@@ -147,7 +146,7 @@ namespace ILGPU.Algorithms.Tests
 
     #endregion
 
-    #region Xunit Transformer
+    #region Xunit Transformer Structures
 
     internal readonly struct IntToLongTransformer
         : ITransformer<int, long>, IXunitSerializable
@@ -228,7 +227,7 @@ namespace ILGPU.Algorithms.Tests
 
     #endregion
 
-    #region Xunit RadixSortOperations
+    #region Xunit RadixSortOperations Structures
 
 <#  
     foreach (var type in IntTypes) { 
