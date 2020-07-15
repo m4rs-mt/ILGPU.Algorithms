@@ -4,9 +4,9 @@
 <#@ import namespace="System.IO" #>
 <#@ output extension=".cs" #>
 
-using ILGPU.Tests;
-using ILGPU.Runtime;
 using ILGPU.Algorithms.ScanReduceOperations;
+using ILGPU.Runtime;
+using ILGPU.Tests;
 using System.Linq;
 using Xunit;
 using Xunit.Abstractions;

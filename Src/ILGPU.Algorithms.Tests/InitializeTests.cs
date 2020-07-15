@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using ILGPU.Tests;
+﻿using ILGPU.Tests;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 

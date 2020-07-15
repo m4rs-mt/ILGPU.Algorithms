@@ -4,9 +4,9 @@
 <#@ import namespace="System.IO" #>
 <#@ output extension=".cs" #>
 
-using System.Linq;
 using ILGPU.Runtime;
 using ILGPU.Tests;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 

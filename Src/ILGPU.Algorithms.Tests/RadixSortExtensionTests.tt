@@ -4,9 +4,9 @@
 <#@ import namespace="System.IO" #>
 <#@ output extension=".cs" #>
 
+using ILGPU.Algorithms.RadixSortOperations;
 using ILGPU.Runtime;
 using ILGPU.Tests;
-using ILGPU.Algorithms.RadixSortOperations;
 using Xunit;
 using Xunit.Abstractions;
 

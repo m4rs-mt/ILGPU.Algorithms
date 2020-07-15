@@ -1,6 +1,6 @@
-﻿using System.Numerics;
-using ILGPU.Runtime;
+﻿using ILGPU.Runtime;
 using ILGPU.Tests;
+using System.Numerics;
 using Xunit;
 using Xunit.Abstractions;
 
