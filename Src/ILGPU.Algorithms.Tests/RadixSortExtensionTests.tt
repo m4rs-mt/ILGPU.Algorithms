@@ -17,57 +17,70 @@ namespace ILGPU.Algorithms.Tests
 
     public abstract partial class RadixSortExtensionTests : TestBase
     {
-        protected RadixSortExtensionTests(ITestOutputHelper output, TestContext testContext)
+        protected RadixSortExtensionTests(
+            ITestOutputHelper output,
+            TestContext testContext)
             : base(output, testContext)
         { }
 
         #region MemberData
 
-        public static TheoryData<object, object, object, object, object, object> AscendingTestData =>
-            new TheoryData<object, object, object, object, object, object>
+        public static TheoryData< object, object, object, object, object, object>
+            AscendingTestData =>
+            new TheoryData< object, object, object, object, object, object>
         {
-            // Type, RadixSortOperation, Sequencer, Start of Sequencer, StepSize of Sequencer, BufferLength
+            // Type, RadixSortOperation, Sequencer, Start of Sequencer,
+            // StepSize of Sequencer, BufferLength
 <#
         var types = SignedIntTypes.Skip(2).Concat(UnsignedIntTypes.Skip(2));
         foreach (var type in types) {
             foreach (var size in ArraySizes) {
 #>
-            { default(<#= type.Type #>), default(XunitAscending<#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, 1, <#= size #> },
+            { default(<#= type.Type #>), default(XunitAscending<#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), 0, 1, <#= size #> },
 <#
             }
         }
 #>
         };
 
-        public static TheoryData<object, object, object, object, object, object> DescendingTestData =>
-            new TheoryData<object, object, object, object, object, object>
+        public static TheoryData< object, object, object, object, object, object>
+            DescendingTestData =>
+            new TheoryData< object, object, object, object, object, object>
         {
-            // Type, RadixSortOperation, Sequencer, Start of Sequencer, StepSize of Sequencer, BufferLength
+            // Type, RadixSortOperation, Sequencer, Start of Sequencer,
+            // StepSize of Sequencer, BufferLength
 <#
         foreach (var type in types) {
             foreach (var size in ArraySizes) {
 #>
-            { default(<#= type.Type #>), default(XunitDescending<#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, 1, <#= size #> },
+            { default(<#= type.Type #>), default(XunitDescending<#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), 0, 1, <#= size #> },
 <#
             }
         }
 #>
         };
 
-        public static TheoryData<object, object, object, object, object, object> ConstantTestData =>
-            new TheoryData<object, object, object, object, object, object>
+        public static TheoryData< object, object, object, object, object, object>
+            ConstantTestData =>
+            new TheoryData< object, object, object, object, object, object>
         {
-            // Type, RadixSortOperation, Sequencer, Start of Sequencer, StepSize of Sequencer, BufferLength
+            // Type, RadixSortOperation, Sequencer, Start of Sequencer,
+            // StepSize of Sequencer, BufferLength
 <#
         foreach (var type in types) {
             foreach (var size in ArraySizes) {
 #>
-            { default(<#= type.Type #>), default(XunitAscending<#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, 0, <#= size #> },
-            { default(<#= type.Type #>), default(XunitAscending<#= type.Name #>), default(<#= type.Name #>TestSequencer), 1, 0, <#= size #> },
+            { default(<#= type.Type #>), default(XunitAscending<#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), 0, 0, <#= size #> },
+            { default(<#= type.Type #>), default(XunitAscending<#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), 1, 0, <#= size #> },
 <#
             if (type.IsUnsignedInt) { continue; }
 #>
-            { default(<#= type.Type #>), default(XunitAscending<#= type.Name #>), default(<#= type.Name #>TestSequencer), -1, 0, <#= size #> },
+            { default(<#= type.Type #>), default(XunitAscending<#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), -1, 0, <#= size #> },
 <#
             }
         }
@@ -118,7 +131,8 @@ namespace ILGPU.Algorithms.Tests
             stream.Synchronize();
 
             var radixSort = Accelerator.CreateRadixSort<T, TRadixSortOp>();
-            var tempMemSize = Accelerator.ComputeRadixSortTempStorageSize<T, TRadixSortOp>(length);
+            var tempMemSize =
+                Accelerator.ComputeRadixSortTempStorageSize<T, TRadixSortOp>(length);
             using var tmpBuffer = Accelerator.Allocate<int>(tempMemSize);
 
             radixSort(stream, input.View, tmpBuffer.View);
@@ -162,7 +176,8 @@ namespace ILGPU.Algorithms.Tests
             stream.Synchronize();
 
             var radixSort = Accelerator.CreateRadixSort<T, TRadixSortOp>();
-            var tempMemSize = Accelerator.ComputeRadixSortTempStorageSize<T, TRadixSortOp>(length);
+            var tempMemSize =
+                Accelerator.ComputeRadixSortTempStorageSize<T, TRadixSortOp>(length);
             using var tmpBuffer = Accelerator.Allocate<int>(tempMemSize);
 
             radixSort(stream, input.View, tmpBuffer.View);
@@ -208,7 +223,8 @@ namespace ILGPU.Algorithms.Tests
             stream.Synchronize();
             
             using var radixSortProvider = Accelerator.CreateRadixSortProvider();
-            var radixSortUsingSortProvider = radixSortProvider.CreateRadixSort<T, TRadixSortOp>();
+            var radixSortUsingSortProvider =
+                radixSortProvider.CreateRadixSort<T, TRadixSortOp>();
 
             radixSortUsingSortProvider(stream, input.View);
 
@@ -251,7 +267,8 @@ namespace ILGPU.Algorithms.Tests
             stream.Synchronize();
             
             using var radixSortProvider = Accelerator.CreateRadixSortProvider();
-            var radixSortUsingSortProvider = radixSortProvider.CreateRadixSort<T, TRadixSortOp>();
+            var radixSortUsingSortProvider =
+                radixSortProvider.CreateRadixSort<T, TRadixSortOp>();
 
             radixSortUsingSortProvider(stream, input.View);
 
@@ -282,7 +299,8 @@ namespace ILGPU.Algorithms.Tests
             stream.Synchronize();
 
             var radixSort = Accelerator.CreateRadixSort<T, TRadixSortOp>();
-            var tempMemSize = Accelerator.ComputeRadixSortTempStorageSize<T, TRadixSortOp>(length);
+            var tempMemSize =
+                Accelerator.ComputeRadixSortTempStorageSize<T, TRadixSortOp>(length);
             using var tmpBuffer = Accelerator.Allocate<int>(tempMemSize);
 
             radixSort(stream, input.View, tmpBuffer.View);
@@ -311,7 +329,8 @@ namespace ILGPU.Algorithms.Tests
             stream.Synchronize();
 
             using var radixSortProvider = Accelerator.CreateRadixSortProvider();
-            var radixSortUsingSortProvider = radixSortProvider.CreateRadixSort<T, TRadixSortOp>();
+            var radixSortUsingSortProvider =
+                radixSortProvider.CreateRadixSort<T, TRadixSortOp>();
 
             radixSortUsingSortProvider(stream, input.View);
 

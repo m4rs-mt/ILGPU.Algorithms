@@ -21,7 +21,8 @@ namespace ILGPU.Algorithms.Tests
             : base(output, testContext)
         { }
 <#
-        var types = SignedIntTypes.Skip(2).Concat(UnsignedIntTypes.Skip(2)).Concat(FloatTypes).ToArray();
+        var types = SignedIntTypes.Skip(2).Concat(
+            UnsignedIntTypes.Skip(2)).Concat(FloatTypes).ToArray();
         var signedTypes = SignedIntTypes.Skip(2).Concat(FloatTypes).ToArray();
 #>
 
@@ -30,52 +31,63 @@ namespace ILGPU.Algorithms.Tests
 <#
         foreach (var srOp in ScanReduceOperations) {
 #>
-        public static TheoryData<object, object, object, object, object, object> Ascending<#= srOp.Name #>TestData =>
+        public static TheoryData<object, object, object, object, object, object>
+            Ascending<#= srOp.Name #>TestData =>
             new TheoryData<object, object, object, object, object, object>
         {
-            // Type, IScanReduceOperation, Sequencer, Start of Sequencer, StepSize of Sequencer, BufferSize
+            // Type, IScanReduceOperation, Sequencer, Start of Sequencer,
+            // StepSize of Sequencer, BufferSize
 <#
         foreach (var type in types) {
             foreach (var size in ArraySizes) {
                 if (type.Type == "float" && size > 1000) { continue; }
 #>
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, 1, <#= size #> },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), 0, 1, <#= size #> },
 <#
             }
         }
 #>
         };
 
-        public static TheoryData<object, object, object, object, object, object> Descending<#= srOp.Name #>TestData =>
+        public static TheoryData<object, object, object, object, object, object>
+            Descending<#= srOp.Name #>TestData =>
             new TheoryData<object, object, object, object, object, object>
         {
-            // Type, IScanReduceOperation, Sequencer, Start of Sequencer, StepSize of Sequencer, BufferSize
+            // Type, IScanReduceOperation, Sequencer, Start of Sequencer,
+            // StepSize of Sequencer, BufferSize
 <#
         foreach (var type in signedTypes) {
             foreach (var size in ArraySizes) {
                 if (type.Type == "float" && size > 1000) { continue; }
 #>
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, -1, <#= size #> },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), 0, -1, <#= size #> },
 <#
             }
         }
 #>
         };
 
-        public static TheoryData<object, object, object, object, object, object> Const<#= srOp.Name #>TestData =>
+        public static TheoryData<object, object, object, object, object, object>
+            Const<#= srOp.Name #>TestData =>
             new TheoryData<object, object, object, object, object, object>
         {
-            // Type, IScanReduceOperation, Sequencer, Start of Sequencer, StepSize of Sequencer, BufferSize
+            // Type, IScanReduceOperation, Sequencer, Start of Sequencer,
+            // StepSize of Sequencer, BufferSize
 <#
         foreach (var type in signedTypes) {
             foreach (var size in ArraySizes) {
 #>
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, 0, <#= size #> },
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 1, 0, <#= size #> },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), 0, 0, <#= size #> },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), 1, 0, <#= size #> },
 <#
                 if(type.IsUnsignedInt) { continue; }
 #>
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), -1, 0, <#= size #> },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), -1, 0, <#= size #> },
 <#
             }
         }
@@ -94,7 +106,7 @@ namespace ILGPU.Algorithms.Tests
 #>
         [Theory]
         [MemberData(nameof(<#= order #><#= srOp.Name #>TestData))]
-        public void ScanInclusive<#= srOp.Name #><#= order #>Test<T, TScanFunc, TSequencer>(
+        public void ScanInclusive<#=srOp.Name#><#=order#>Test<T, TScanFunc, TSequencer>(
             T _,
             TScanFunc func,
             TSequencer sequencer,
@@ -133,7 +145,7 @@ namespace ILGPU.Algorithms.Tests
 #>
         [Theory]
         [MemberData(nameof(<#= order #><#= srOp.Name #>TestData))]
-        public void ScanExclusive<#= srOp.Name #><#= order #>Test<T, TScanFunc, TSequencer>(
+        public void ScanExclusive<#=srOp.Name#><#=order#>Test<T, TScanFunc, TSequencer>(
             T _,
             TScanFunc func,
             TSequencer sequencer,

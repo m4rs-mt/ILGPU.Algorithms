@@ -24,7 +24,8 @@ namespace ILGPU.Algorithms.Tests
         { }
 
 <#
-        var types = SignedIntTypes.Skip(2).Concat(UnsignedIntTypes.Skip(2)).Concat(FloatTypes).ToArray();
+        var types = SignedIntTypes.Skip(2).Concat(
+            UnsignedIntTypes.Skip(2)).Concat(FloatTypes).ToArray();
         int[] fractions = { 1, 2, 4};
 #>
         #region Kernel implementation
@@ -32,13 +33,16 @@ namespace ILGPU.Algorithms.Tests
 <#
         foreach (var func in WarpFunctions) {
 #>
-        internal static void <#= func #>Kernel<T, TFunction>(ArrayView<T> input, ArrayView<T> output)
+        internal static void <#= func #>Kernel<T, TFunction>(
+            ArrayView<T> input,
+            ArrayView<T> output)
             where T : unmanaged
             where TFunction : struct, IScanReduceOperation<T>
         {
             var globalIndex = Grid.GlobalIndex.X;
 
-            output[globalIndex] = GroupExtensions.<#= func #><T, TFunction>(input[globalIndex]);
+            output[globalIndex] = GroupExtensions.<#= func #><T, TFunction>(
+                input[globalIndex]);
         }
 
 <#
@@ -50,22 +54,29 @@ namespace ILGPU.Algorithms.Tests
 <#
         foreach (var srOp in ScanReduceOperations) {
 #>
-        public static TheoryData<object, object, object, object, object, object> <#= srOp.Name #>TestData =>
-            new TheoryData<object, object, object, object, object, object>
+        public static TheoryData< object, object, object, object, object, object>
+            <#= srOp.Name #>TestData =>
+            new TheoryData< object, object, object, object, object, object>
         {
-            // Type, ScanReduceOperation, Sequencer, Start of Sequence, StepSize of Sequence, Fraction of Size
+            // Type, ScanReduceOperation, Sequencer, Start of Sequence,
+            // StepSize of Sequence, Fraction of Size
 <#
             foreach (var type in types) {
                 foreach (var frac in fractions) {
 #>
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, 0, <#= frac #> },
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 1, 0, <#= frac #> },
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, 1, <#= frac #> },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), 0, 0, <#= frac #> },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), 1, 0, <#= frac #> },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), 0, 1, <#= frac #> },
 <#
                 if(type.IsUnsignedInt) { continue; }
 #>
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), -1, 0, <#= frac #> },
-            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>), default(<#= type.Name #>TestSequencer), 0, -1, <#= frac #> },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), -1, 0, <#= frac #> },
+            { default(<#= type.Type #>), default(Xunit<#= srOp.Name #><#= type.Name #>),
+                default(<#= type.Name #>TestSequencer), 0, -1, <#= frac #> },
 <#
                 }
             }
@@ -98,7 +109,12 @@ namespace ILGPU.Algorithms.Tests
             using var output = Accelerator.Allocate<T>(size);
             using var stream = Accelerator.CreateStream();
 
-            input.CopyFrom(stream, sequencer.ComputeSequence(start, stepSize, size), 0, 0, size);
+            input.CopyFrom(
+                stream,
+                sequencer.ComputeSequence(start, stepSize, size),
+                0,
+                0,
+                size);
             stream.Synchronize();
             
             Execute<KernelConfig, T, TFunction>((1, size), input.View, output.View);
@@ -129,7 +145,12 @@ namespace ILGPU.Algorithms.Tests
             using var output = Accelerator.Allocate<T>(size);
             using var stream = Accelerator.CreateStream();
 
-            input.CopyFrom(stream, sequencer.ComputeSequence(start, stepSize, size), 0, 0, size);
+            input.CopyFrom(
+                stream,
+                sequencer.ComputeSequence(start, stepSize, size),
+                0,
+                0,
+                size);
             stream.Synchronize();
             
             Execute<KernelConfig, T, TFunction>((1, size), input.View, output.View);
@@ -157,7 +178,12 @@ namespace ILGPU.Algorithms.Tests
             using var output = Accelerator.Allocate<T>(size);
             using var stream = Accelerator.CreateStream();
 
-            input.CopyFrom(stream, sequencer.ComputeSequence(start, stepSize, size), 0, 0, size);
+            input.CopyFrom(
+                stream,
+                sequencer.ComputeSequence(start, stepSize, size),
+                0,
+                0,
+                size);
             stream.Synchronize();
             
             Execute<KernelConfig, T, TFunction>((1, size), input.View, output.View);
@@ -186,7 +212,12 @@ namespace ILGPU.Algorithms.Tests
             using var output = Accelerator.Allocate<T>(size);
             using var stream = Accelerator.CreateStream();
 
-            input.CopyFrom(stream, sequencer.ComputeSequence(start, stepSize, size), 0, 0, size);
+            input.CopyFrom(
+                stream,
+                sequencer.ComputeSequence(start, stepSize, size),
+                0,
+                0,
+                size);
             stream.Synchronize();
             
             Execute<KernelConfig, T, TFunction>((1, size), input.View, output.View);
@@ -216,7 +247,12 @@ namespace ILGPU.Algorithms.Tests
             using var output = Accelerator.Allocate<T>(size);
             using var stream = Accelerator.CreateStream();
 
-            input.CopyFrom(stream, sequencer.ComputeSequence(start, stepSize, size), 0, 0, size);
+            input.CopyFrom(
+                stream,
+                sequencer.ComputeSequence(start, stepSize, size),
+                0,
+                0,
+                size);
             stream.Synchronize();
             
             Execute<KernelConfig, T, TFunction>((1, size), input.View, output.View);
@@ -241,7 +277,10 @@ namespace ILGPU.Algorithms.Tests
             return result;
         }
 
-        private T[] CalcValues<T, TFunction>(MemoryBuffer<T> buffer, TFunction func, ScanKind kind)
+        private T[] CalcValues<T, TFunction>(
+            MemoryBuffer<T> buffer,
+            TFunction func,
+            ScanKind kind)
             where T : unmanaged
             where TFunction : struct, IScanReduceOperation<T>
         {

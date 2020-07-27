@@ -16,61 +16,90 @@ namespace ILGPU.Algorithms.Tests
 
     public abstract partial class ReorderExtensionTests : TestBase
     {
-        protected ReorderExtensionTests(ITestOutputHelper output, TestContext testContext)
+        protected ReorderExtensionTests(
+            ITestOutputHelper output,
+            TestContext testContext)
             : base(output, testContext)
         { }
 <#
-        var types = SignedIntTypes.Skip(2).Concat(UnsignedIntTypes.Skip(2)).Concat(FloatTypes).ToArray();
+        var types = SignedIntTypes.Skip(2).Concat(
+            UnsignedIntTypes.Skip(2)).Concat(FloatTypes).ToArray();
 #>
 
         #region MemberData
 
-        public static TheoryData<object, object, object, object, object, object> ReorderTestData =>
+        public static TheoryData<object, object, object, object, object, object>
+            ReorderTestData =>
             new TheoryData<object, object, object, object, object, object>
             {
-                // Type, ITransformer, Sequencer, Start of Sequencer, StepSize of Sequencer, BufferLength
+                // Type, ITransformer, Sequencer, Start of Sequencer,
+                // StepSize of Sequencer, BufferLength
 <#
         foreach (var type in types) {
             foreach (var size in ArraySizes) {
 #>
-                { default(<#= type.Type #>), default(<#= type.Name #>Mul2), default(<#= type.Name #>TestSequencer), 0, 0, <#= size #>},
-                { default(<#= type.Type #>), default(<#= type.Name #>Mul2), default(<#= type.Name #>TestSequencer), 1, 0, <#= size #>},
-                { default(<#= type.Type #>), default(<#= type.Name #>Mul2), default(<#= type.Name #>TestSequencer), 0, 1, <#= size #>},
+                { default(<#= type.Type #>), default(<#= type.Name #>Mul2),
+                    default(<#= type.Name #>TestSequencer), 0, 0, <#= size #>},
+                { default(<#= type.Type #>), default(<#= type.Name #>Mul2),
+                    default(<#= type.Name #>TestSequencer), 1, 0, <#= size #>},
+                { default(<#= type.Type #>), default(<#= type.Name #>Mul2),
+                    default(<#= type.Name #>TestSequencer), 0, 1, <#= size #>},
 <#
                 if(type.IsUnsignedInt) { continue; }
 #>
-                { default(<#= type.Type #>), default(<#= type.Name #>Mul2), default(<#= type.Name #>TestSequencer), -1, 0, <#= size #>},
-                { default(<#= type.Type #>), default(<#= type.Name #>Mul2), default(<#= type.Name #>TestSequencer), 0, -1, <#= size #>},
+                { default(<#= type.Type #>), default(<#= type.Name #>Mul2),
+                    default(<#= type.Name #>TestSequencer), -1, 0, <#= size #>},
+                { default(<#= type.Type #>), default(<#= type.Name #>Mul2),
+                    default(<#= type.Name #>TestSequencer), 0, -1, <#= size #>},
 <#
             }
         }
 #>
             };
 
-        public static TheoryData<object, object, object, object, object, object, object> ReorderTransformSourceTargetTestData =>
+        public static TheoryData<object, object, object, object, object, object, object>
+            ReorderTransformSourceTargetTestData =>
             new TheoryData<object, object, object, object, object, object, object>
             {
-                // Type1, Type2, ITransformer, Sequencer, Start of Sequencer, StepSize of Sequencer, BufferLength
+                // Type1, Type2, ITransformer, Sequencer, Start of Sequencer,
+                // StepSize of Sequencer, BufferLength
 <#
         foreach (var size in ArraySizes) {
 #>
-                { default(int), default(long), default(IntToLongTransformer), default(Int32TestSequencer), 0, 0, <#= size #>},
-                { default(int), default(long), default(IntToLongTransformer), default(Int32TestSequencer), 1, 0, <#= size #>},
-                { default(int), default(long), default(IntToLongTransformer), default(Int32TestSequencer), -1, 0, <#= size #>},
-                { default(int), default(long), default(IntToLongTransformer), default(Int32TestSequencer), 0, 1, <#= size #>},
-                { default(int), default(long), default(IntToLongTransformer), default(Int32TestSequencer), 0, -1, <#= size #>},
+                { default(int), default(long), default(IntToLongTransformer),
+                    default(Int32TestSequencer), 0, 0, <#= size #>},
+                { default(int), default(long), default(IntToLongTransformer),
+                    default(Int32TestSequencer), 1, 0, <#= size #>},
+                { default(int), default(long), default(IntToLongTransformer),
+                    default(Int32TestSequencer), -1, 0, <#= size #>},
+                { default(int), default(long), default(IntToLongTransformer),
+                    default(Int32TestSequencer), 0, 1, <#= size #>},
+                { default(int), default(long), default(IntToLongTransformer),
+                    default(Int32TestSequencer), 0, -1, <#= size #>},
 
-                { default(uint), default(ulong), default(UIntToULongTransformer), default(UInt32TestSequencer), 0, 0, <#= size #>},
-                { default(uint), default(ulong), default(UIntToULongTransformer), default(UInt32TestSequencer), 1, 0, <#= size #>},
-                { default(uint), default(ulong), default(UIntToULongTransformer), default(UInt32TestSequencer), 0, 1, <#= size #>},
+                { default(uint), default(ulong), default(UIntToULongTransformer),
+                    default(UInt32TestSequencer), 0, 0, <#= size #>},
+                { default(uint), default(ulong), default(UIntToULongTransformer),
+                    default(UInt32TestSequencer), 1, 0, <#= size #>},
+                { default(uint), default(ulong), default(UIntToULongTransformer),
+                    default(UInt32TestSequencer), 0, 1, <#= size #>},
 
-                { default(uint), default(int), default(UInt32ToBitCompInt32Transformer), default(UInt32TestSequencer), 0, 0, <#= size #>},
-                { default(uint), default(int), default(UInt32ToBitCompInt32Transformer), default(UInt32TestSequencer), 1, 0, <#= size #>},
-                { default(uint), default(int), default(UInt32ToBitCompInt32Transformer), default(UInt32TestSequencer), 0, 1, <#= size #>},
+                { default(uint), default(int), default(UInt32ToBitCompInt32Transformer),
+                    default(UInt32TestSequencer), 0, 0, <#= size #>},
+                { default(uint), default(int), default(UInt32ToBitCompInt32Transformer),
+                    default(UInt32TestSequencer), 1, 0, <#= size #>},
+                { default(uint), default(int), default(UInt32ToBitCompInt32Transformer),
+                    default(UInt32TestSequencer), 0, 1, <#= size #>},
 
-                { default(ulong), default(long), default(UInt64ToBitCompInt64Transformer), default(UInt64TestSequencer), 0, 0, <#= size #>},
-                { default(ulong), default(long), default(UInt64ToBitCompInt64Transformer), default(UInt64TestSequencer), 1, 0, <#= size #>},
-                { default(ulong), default(long), default(UInt64ToBitCompInt64Transformer), default(UInt64TestSequencer), 0, 1, <#= size #>},
+                { default(ulong), default(long),
+                    default(UInt64ToBitCompInt64Transformer),
+                    default(UInt64TestSequencer), 0, 0, <#= size #>},
+                { default(ulong), default(long),
+                    default(UInt64ToBitCompInt64Transformer),
+                    default(UInt64TestSequencer), 1, 0, <#= size #>},
+                { default(ulong), default(long),
+                    default(UInt64ToBitCompInt64Transformer),
+                    default(UInt64TestSequencer), 0, 1, <#= size #>},
 
 <#
         }
@@ -107,7 +136,9 @@ namespace ILGPU.Algorithms.Tests
             Accelerator.Reorder(stream, input.View, output.View, reorder.View);
             stream.Synchronize();
 
-            Verify(output, CalcValues<T, T, IdentityTransformer<T>>(
+            Verify(
+                output,
+                CalcValues<T, T, IdentityTransformer<T>>(
                     inputSeq,
                     reorderSeq,
                     new IdentityTransformer<T>()));
@@ -147,7 +178,9 @@ namespace ILGPU.Algorithms.Tests
                 transformer);
             stream.Synchronize();
 
-            Verify(output, CalcValues<T, T, TTransform>(inputSeq, reorderSeq, transformer));
+            Verify(
+                output,
+                CalcValues<T, T, TTransform>( inputSeq, reorderSeq, transformer));
         }
 
         [Theory]
@@ -183,7 +216,9 @@ namespace ILGPU.Algorithms.Tests
                 transformer);
             stream.Synchronize();
 
-            Verify(output, CalcValues<T, T, TTransform>(inputSeq, reorderSeq, transformer));
+            Verify(
+                output,
+                CalcValues<T, T, TTransform>(inputSeq, reorderSeq, transformer));
         }
 
         [Theory]
@@ -225,7 +260,12 @@ namespace ILGPU.Algorithms.Tests
                 transformer);
             stream.Synchronize();
 
-            Verify(output, CalcValues<TSource, TTarget, TTransform>(inputSeq, reorderSeq, transformer));
+            Verify(
+                output,
+                CalcValues<TSource, TTarget, TTransform>(
+                    inputSeq,
+                    reorderSeq,
+                    transformer));
         }
 
         #region Helper Method

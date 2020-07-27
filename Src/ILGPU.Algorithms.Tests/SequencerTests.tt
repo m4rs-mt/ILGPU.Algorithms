@@ -82,7 +82,11 @@ namespace ILGPU.Algorithms.Tests
         {
             using var buffer = Accelerator.Allocate<<#= type.Type #>>(bufferLength);
             using var stream = Accelerator.CreateStream();
-            Accelerator.RepeatedSequence(stream, buffer.View, 2, new <#= type.Name #>Sequencer());
+            Accelerator.RepeatedSequence(
+                stream,
+                buffer.View,
+                2,
+                new <#= type.Name #>Sequencer());
 
             <#= type.Type #>[] expected = new <#= type.Type #>[bufferLength];
             for (int i = 0, e = bufferLength-1; i < e; i += 2)
@@ -106,7 +110,11 @@ namespace ILGPU.Algorithms.Tests
         {
             using var buffer = Accelerator.Allocate<<#= type.Type #>>(bufferLength);
             using var stream = Accelerator.CreateStream();
-            Accelerator.BatchedSequence(stream, buffer.View, 2, new <#= type.Name #>Sequencer());
+            Accelerator.BatchedSequence(
+                stream,
+                buffer.View,
+                2,
+                new <#= type.Name #>Sequencer());
 
             <#= type.Type #>[] expected = new <#= type.Type #>[bufferLength];
             for (int i = 0, e = bufferLength; i < e; i+=2)
@@ -131,7 +139,12 @@ namespace ILGPU.Algorithms.Tests
         {
             using var buffer = Accelerator.Allocate<<#= type.Type #>>(bufferLength);
             using var stream = Accelerator.CreateStream();
-            Accelerator.RepeatedBatchedSequence(stream, buffer.View, 2, 4, new <#= type.Name #>Sequencer());
+            Accelerator.RepeatedBatchedSequence(
+                stream,
+                buffer.View,
+                2,
+                4,
+                new <#= type.Name #>Sequencer());
 
             <#= type.Type #>[] expected = new <#= type.Type #>[bufferLength];
             for (int i = 0, e = bufferLength; i < e; i+=8)

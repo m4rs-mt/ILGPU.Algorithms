@@ -143,7 +143,10 @@ namespace ILGPU.Algorithms.Tests
 
         internal readonly struct Vector2DSequencer : ITestSequencer<Vector2>
         {
-            public Vector2[] ComputeSequence(Vector2 start, Vector2 stepSize, int length)
+            public Vector2[] ComputeSequence(
+                Vector2 start,
+                Vector2 stepSize,
+                int length)
             {
                 Vector2[] sequence = new Vector2[length];
                 sequence[0] = start;
@@ -152,7 +155,10 @@ namespace ILGPU.Algorithms.Tests
                 return sequence;
             }
 
-            public Vector2[] ComputeInvertedSequence(Vector2 start, Vector2 stepSize, int length)
+            public Vector2[] ComputeInvertedSequence(
+                Vector2 start,
+                Vector2 stepSize,
+                int length)
             {
                 Vector2[] sequence = new Vector2[length];
                 sequence[length - 1] = start;
@@ -168,7 +174,10 @@ namespace ILGPU.Algorithms.Tests
 
         internal readonly struct Vector3DSequencer : ITestSequencer<Vector3>
         {
-            public Vector3[] ComputeSequence(Vector3 start, Vector3 stepSize, int length)
+            public Vector3[] ComputeSequence(
+                Vector3 start,
+                Vector3 stepSize,
+                int length)
             {
                 Vector3[] sequence = new Vector3[length];
                 sequence[0] = start;
@@ -177,7 +186,10 @@ namespace ILGPU.Algorithms.Tests
                 return sequence;
             }
 
-            public Vector3[] ComputeInvertedSequence(Vector3 start, Vector3 stepSize, int length)
+            public Vector3[] ComputeInvertedSequence(
+                Vector3 start,
+                Vector3 stepSize,
+                int length)
             {
                 Vector3[] sequence = new Vector3[length];
                 sequence[length - 1] = start;
@@ -192,7 +204,10 @@ namespace ILGPU.Algorithms.Tests
 
         internal readonly struct Vector4DSequencer : ITestSequencer<Vector4>
         {
-            public Vector4[] ComputeSequence(Vector4 start, Vector4 stepSize, int length)
+            public Vector4[] ComputeSequence(
+                Vector4 start,
+                Vector4 stepSize,
+                int length)
             {
                 Vector4[] sequence = new Vector4[length];
                 sequence[0] = start;
@@ -201,7 +216,10 @@ namespace ILGPU.Algorithms.Tests
                 return sequence;
             }
 
-            public Vector4[] ComputeInvertedSequence(Vector4 start, Vector4 stepSize, int length)
+            public Vector4[] ComputeInvertedSequence(
+                Vector4 start,
+                Vector4 stepSize,
+                int length)
             {
                 Vector4[] sequence = new Vector4[length];
                 sequence[length - 1] = start;

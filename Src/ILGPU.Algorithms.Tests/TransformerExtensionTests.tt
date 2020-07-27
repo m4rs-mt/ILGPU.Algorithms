@@ -16,7 +16,9 @@ namespace ILGPU.Algorithms.Tests
 {
     public abstract partial class TransformExtensionTests : TestBase
     {
-        protected TransformExtensionTests(ITestOutputHelper output, TestContext testContext)
+        protected TransformExtensionTests(
+            ITestOutputHelper output,
+            TestContext testContext)
             : base(output, testContext) { }
 
         #region MemberData
@@ -37,11 +39,13 @@ namespace ILGPU.Algorithms.Tests
             new TheoryData<object, object, object>
         {
 <#
-        var types = SignedIntTypes.Skip(2).Concat(UnsignedIntTypes.Skip(2)).Concat(FloatTypes).ToArray();
+        var types = SignedIntTypes.Skip(2).Concat(
+            UnsignedIntTypes.Skip(2)).Concat(FloatTypes).ToArray();
         foreach (var type in types) {
             foreach (var size in ArraySizes) {
 #>
-            { default(<#= type.Type #>), default(Index1To<#= type.Name #>Transformer), <#= size #> },
+            { default(<#= type.Type #>), default(Index1To<#= type.Name #>Transformer),
+                <#= size #> },
 <#
             }
         }
@@ -84,7 +88,8 @@ namespace ILGPU.Algorithms.Tests
             var sequence = sequencer.ComputeSequence(42, 0, length);
             input.CopyFrom(stream, sequence, 0, 0, length);
 
-            var transformer = Accelerator.CreateTransformer<int, long, IntToLongTransformer>();
+            var transformer =
+                Accelerator.CreateTransformer<int, long, IntToLongTransformer>();
             transformer(stream,
                 input.View,
                 output.View,
