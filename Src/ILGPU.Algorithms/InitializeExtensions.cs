@@ -1,14 +1,14 @@
-﻿// -----------------------------------------------------------------------------
-//                             ILGPU.Algorithms
-//                  Copyright (c) 2019 ILGPU Algorithms Project
-//                Copyright(c) 2016-2018 ILGPU Lightning Project
-//                                www.ilgpu.net
+﻿// ---------------------------------------------------------------------------------------
+//                                   ILGPU.Algorithms
+//                      Copyright (c) 2019 ILGPU Algorithms Project
+//                     Copyright(c) 2016-2018 ILGPU Lightning Project
+//                                    www.ilgpu.net
 //
 // File: InitializeExtensions.cs
 //
-// This file is part of ILGPU and is distributed under the University of
-// Illinois Open Source License. See LICENSE.txt for details.
-// -----------------------------------------------------------------------------
+// This file is part of ILGPU and is distributed under the University of Illinois Open
+// Source License. See LICENSE.txt for details
+// ---------------------------------------------------------------------------------------
 
 using ILGPU.Runtime;
 using System;
@@ -57,16 +57,16 @@ namespace ILGPU.Algorithms
         /// <param name="accelerator">The accelerator.</param>
         /// <param name="minDataSize">The minimum data size for maximum occupancy.</param>
         /// <returns>The loaded initializer.</returns>
-        private static Action<AcceleratorStream, Index1, ArrayView<T>, T> CreateRawInitializer<T>(
+        private static Action<AcceleratorStream, Index1, ArrayView<T>, T>
+            CreateRawInitializer<T>(
             this Accelerator accelerator,
             out Index1 minDataSize)
             where T : unmanaged
         {
             var result = accelerator.LoadAutoGroupedKernel(
                 (Action<Index1, ArrayView<T>, T>)InitializeKernel,
-                out int groupSize,
-                out int minGridSize);
-            minDataSize = groupSize * minGridSize;
+                out var info);
+            minDataSize = info.MinGroupSize.Value * info.MinGridSize.Value;
             return result;
         }
 
@@ -80,7 +80,8 @@ namespace ILGPU.Algorithms
             this Accelerator accelerator)
             where T : unmanaged
         {
-            var rawInitializer = accelerator.CreateRawInitializer<T>(out Index1 minDataSize);
+            var rawInitializer = accelerator.CreateRawInitializer<T>(
+                out Index1 minDataSize);
             return (stream, view, value) =>
             {
                 if (!view.IsValid)

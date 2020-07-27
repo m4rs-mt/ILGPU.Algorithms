@@ -1,13 +1,13 @@
-﻿// -----------------------------------------------------------------------------
-//                             ILGPU.Algorithms
-//                  Copyright (c) 2019 ILGPU Algorithms Project
-//                                www.ilgpu.net
+﻿// ---------------------------------------------------------------------------------------
+//                                   ILGPU.Algorithms
+//                      Copyright (c) 2019 ILGPU Algorithms Project
+//                                    www.ilgpu.net
 //
 // File: TempViewManager.cs
 //
-// This file is part of ILGPU and is distributed under the University of
-// Illinois Open Source License. See LICENSE.txt for details.
-// -----------------------------------------------------------------------------
+// This file is part of ILGPU and is distributed under the University of Illinois Open
+// Source License. See LICENSE.txt for details
+// ---------------------------------------------------------------------------------------
 
 using System;
 using System.Runtime.CompilerServices;
@@ -26,7 +26,9 @@ namespace ILGPU.Algorithms
         /// Constructs a new temp-view manager.
         /// </summary>
         /// <param name="tempView">The source temp view to use.</param>
-        /// <param name="paramName">The associated parameter name (for error messages).</param>
+        /// <param name="paramName">
+        /// The associated parameter name (for error messages).
+        /// </param>
         public TempViewManager(ArrayView<int> tempView, string paramName)
         {
             if (!tempView.IsValid)

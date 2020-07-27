@@ -102,6 +102,14 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>GroupExtensionTests.cs</LastGenOutput>
     </None>
+    <None Update="Histogram.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Histogram.cs</LastGenOutput>
+    </None>
+    <None Update="HistogramTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>HistogramTests.cs</LastGenOutput>
+	</None>
     <None Update="RadixSortExtensionTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>RadixSortExtensionTests.cs</LastGenOutput>
@@ -177,6 +185,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>GroupExtensionTests.tt</DependentUpon>
     </Compile>
+	    <Compile Update="Histogram.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Histogram.tt</DependentUpon>
+    </Compile>
+    <Compile Update="HistogramTests.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>HistogramTests.tt</DependentUpon>
+	</Compile>
     <Compile Update="RadixSortExtensionTests.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

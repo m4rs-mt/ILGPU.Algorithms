@@ -1,14 +1,14 @@
-﻿// -----------------------------------------------------------------------------
-//                             ILGPU.Algorithms
-//                  Copyright (c) 2019 ILGPU Algorithms Project
-//                Copyright(c) 2016-2018 ILGPU Lightning Project
-//                                www.ilgpu.net
+﻿// ---------------------------------------------------------------------------------------
+//                                   ILGPU.Algorithms
+//                      Copyright (c) 2019 ILGPU Algorithms Project
+//                     Copyright(c) 2016-2018 ILGPU Lightning Project
+//                                    www.ilgpu.net
 //
 // File: ScanExtensions.cs
 //
-// This file is part of ILGPU and is distributed under the University of
-// Illinois Open Source License. See LICENSE.txt for details.
-// -----------------------------------------------------------------------------
+// This file is part of ILGPU and is distributed under the University of Illinois Open
+// Source License. See LICENSE.txt for details
+// ---------------------------------------------------------------------------------------
 
 using ILGPU.Algorithms.ScanReduceOperations;
 using ILGPU.Runtime;
@@ -16,6 +16,8 @@ using ILGPU.Util;
 using System;
 using System.Runtime.CompilerServices;
 using static ILGPU.Algorithms.GroupExtensions;
+
+// disable: max_line_length
 
 namespace ILGPU.Algorithms
 {

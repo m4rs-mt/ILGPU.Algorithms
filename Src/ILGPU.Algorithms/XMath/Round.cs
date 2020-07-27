@@ -1,13 +1,13 @@
-﻿// -----------------------------------------------------------------------------
-//                             ILGPU.Algorithms
-//                  Copyright (c) 2019 ILGPU Algorithms Project
-//                                www.ilgpu.net
+﻿// ---------------------------------------------------------------------------------------
+//                                   ILGPU.Algorithms
+//                      Copyright (c) 2019 ILGPU Algorithms Project
+//                                    www.ilgpu.net
 //
 // File: Round.cs
 //
-// This file is part of ILGPU and is distributed under the University of
-// Illinois Open Source License. See LICENSE.txt for details.
-// -----------------------------------------------------------------------------
+// This file is part of ILGPU and is distributed under the University of Illinois Open
+// Source License. See LICENSE.txt for details
+// ---------------------------------------------------------------------------------------
 
 using ILGPU.Util;
 using System.Runtime.CompilerServices;
@@ -17,7 +17,8 @@ namespace ILGPU.Algorithms
     partial class XMath
     {
         /// <summary>
-        /// Rounds the value to the nearest value (halfway cases are rounded away from zero).
+        /// Rounds the value to the nearest value (halfway cases are rounded away from
+        /// zero).
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The nearest value.</returns>
@@ -26,7 +27,8 @@ namespace ILGPU.Algorithms
             Utilities.Select(value < 0.0, Floor(value), Ceiling(value));
 
         /// <summary>
-        /// Rounds the value to the nearest value (halfway cases are rounded away from zero).
+        /// Rounds the value to the nearest value (halfway cases are rounded away from
+        /// zero).
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The nearest value.</returns>

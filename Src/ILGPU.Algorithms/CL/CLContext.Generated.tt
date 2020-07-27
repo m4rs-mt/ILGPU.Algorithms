@@ -1,13 +1,13 @@
-﻿// -----------------------------------------------------------------------------
-//                             ILGPU.Algorithms
-//                  Copyright (c) 2019 ILGPU Algorithms Project
-//                                www.ilgpu.net
+﻿// ---------------------------------------------------------------------------------------
+//                                   ILGPU.Algorithms
+//                      Copyright (c) 2019 ILGPU Algorithms Project
+//                                    www.ilgpu.net
 //
 // File: CLContext.Generated.tt/CLContext.Generated.cs
 //
-// This file is part of ILGPU and is distributed under the University of
-// Illinois Open Source License. See LICENSE.txt for details
-// -----------------------------------------------------------------------------
+// This file is part of ILGPU and is distributed under the University of Illinois Open
+// Source License. See LICENSE.txt for details
+// ---------------------------------------------------------------------------------------
 
 <#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ include file="../TypeInformation.ttinclude"#>
@@ -42,7 +42,9 @@ namespace ILGPU.Algorithms.CL
             manager.RegisterBinaryArithmetic(
                 BinaryArithmeticKind.<#= kind #>,
                 BasicValueType.<#= basicType #>,
-                GetMathIntrinsic("<#= name #>", typeof(<#= type #>), typeof(<#= type #>)));
+                GetMathIntrinsic(
+                    "<#= name #>",
+                    typeof(<#= type #>), typeof(<#= type #>)));
 <# } #>
 
 <# foreach (var (name, type, kind, basicType) in unaryMathFunctions) { #>

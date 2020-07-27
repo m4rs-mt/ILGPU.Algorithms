@@ -1,13 +1,13 @@
-﻿// -----------------------------------------------------------------------------
-//                             ILGPU.Algorithms
-//                  Copyright (c) 2019 ILGPU Algorithms Project
-//                                www.ilgpu.net
+﻿// ---------------------------------------------------------------------------------------
+//                                   ILGPU.Algorithms
+//                      Copyright (c) 2019 ILGPU Algorithms Project
+//                                    www.ilgpu.net
 //
 // File: PTXMath.cs
 //
-// This file is part of ILGPU and is distributed under the University of
-// Illinois Open Source License. See LICENSE.txt for details.
-// -----------------------------------------------------------------------------
+// This file is part of ILGPU and is distributed under the University of Illinois Open
+// Source License. See LICENSE.txt for details
+// ---------------------------------------------------------------------------------------
 
 using ILGPU.Backends.PTX;
 using ILGPU.IR;
@@ -15,6 +15,8 @@ using ILGPU.IR.Values;
 using ILGPU.Util;
 using System;
 using System.Runtime.CompilerServices;
+
+// disable: max_line_length
 
 namespace ILGPU.Algorithms.PTX
 {
@@ -45,11 +47,9 @@ namespace ILGPU.Algorithms.PTX
 
             var argument = codeGenerator.LoadPrimitive(arithmeticValue.Value);
             var targetRegister = codeGenerator.AllocateHardware(arithmeticValue);
-            using (var command = codeGenerator.BeginCommand(instruction))
-            {
-                command.AppendArgument(targetRegister);
-                command.AppendArgument(argument);
-            }
+            using var command = codeGenerator.BeginCommand(instruction);
+            command.AppendArgument(targetRegister);
+            command.AppendArgument(argument);
         }
 
         #endregion

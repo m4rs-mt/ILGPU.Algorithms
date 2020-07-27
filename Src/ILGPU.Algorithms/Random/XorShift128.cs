@@ -1,16 +1,16 @@
-﻿// -----------------------------------------------------------------------------
-//                             ILGPU.Algorithms
-//                  Copyright (c) 2019 ILGPU Algorithms Project
-//                 Copyright (c) 2017-2018 ILGPU Samples Project
-//                                www.ilgpu.net
+﻿// ---------------------------------------------------------------------------------------
+//                                   ILGPU.Algorithms
+//                      Copyright (c) 2019 ILGPU Algorithms Project
+//                     Copyright (c) 2017-2018 ILGPU Samples Project
+//                                    www.ilgpu.net
 //
 // File: XorShift128.cs
 //
 // Algorithm: https://en.wikipedia.org/wiki/Xorshift
 //
-// This file is part of ILGPU and is distributed under the University of
-// Illinois Open Source License. See LICENSE.txt for details.
-// -----------------------------------------------------------------------------
+// This file is part of ILGPU and is distributed under the University of Illinois Open
+// Source License. See LICENSE.txt for details
+// ---------------------------------------------------------------------------------------
 
 using System;
 using System.Diagnostics;
@@ -53,7 +53,10 @@ namespace ILGPU.Algorithms.Random
         /// <param name="state1">The initial state value 1.</param>
         /// <param name="state2">The initial state value 2.</param>
         /// <param name="state3">The initial state value 3.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1025:ReplaceRepetitiveArgumentsWithParamsArray", Justification = "Performance reasons")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1025:ReplaceRepetitiveArgumentsWithParamsArray",
+            Justification = "Performance reasons")]
         public XorShift128(uint state0, uint state1, uint state2, uint state3)
         {
             Debug.Assert(state0 != 0 || state1 != 0 ||

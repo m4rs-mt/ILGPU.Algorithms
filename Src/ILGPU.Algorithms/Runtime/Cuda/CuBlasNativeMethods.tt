@@ -1,13 +1,13 @@
-﻿// -----------------------------------------------------------------------------
-//                             ILGPU.Algorithms
-//                  Copyright (c) 2020 ILGPU Algorithms Project
-//                                www.ilgpu.net
+﻿// ---------------------------------------------------------------------------------------
+//                                   ILGPU.Algorithms
+//                      Copyright (c) 2020 ILGPU Algorithms Project
+//                                    www.ilgpu.net
 //
 // File: CuBlasNativeMethods.tt/CuBlasNativeMethods.cs
 //
-// This file is part of ILGPU and is distributed under the University of
-// Illinois Open Source License. See LICENSE.txt for details
-// -----------------------------------------------------------------------------
+// This file is part of ILGPU and is distributed under the University of Illinois Open
+// Source License. See LICENSE.txt for details
+// ---------------------------------------------------------------------------------------
 
 <#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ include file="CuBlasMappings.ttinclude"#>
@@ -28,6 +28,9 @@ var apis = new (string, bool)[]
 
 using System;
 using System.Runtime.InteropServices;
+
+// disable: max_line_length
+#pragma warning disable IDE1006 // Naming Styles
 
 namespace ILGPU.Runtime.Cuda.API
 {
@@ -1340,3 +1343,5 @@ namespace ILGPU.Runtime.Cuda.API
     }
 <# } #>
 }
+
+#pragma warning restore IDE1006 // Naming Styles

@@ -1,13 +1,13 @@
-﻿// -----------------------------------------------------------------------------
-//                             ILGPU.Algorithms
-//                  Copyright (c) 2019 ILGPU Algorithms Project
-//                                www.ilgpu.net
+﻿// ---------------------------------------------------------------------------------------
+//                                   ILGPU.Algorithms
+//                      Copyright (c) 2019 ILGPU Algorithms Project
+//                                    www.ilgpu.net
 //
 // File: TileInfo.cs
 //
-// This file is part of ILGPU and is distributed under the University of
-// Illinois Open Source License. See LICENSE.txt for details.
-// -----------------------------------------------------------------------------
+// This file is part of ILGPU and is distributed under the University of Illinois Open
+// Source License. See LICENSE.txt for details
+// ---------------------------------------------------------------------------------------
 
 using System.Runtime.CompilerServices;
 
@@ -24,7 +24,9 @@ namespace ILGPU.Algorithms
         /// Constructs a new tile information instance.
         /// </summary>
         /// <param name="input">The input view.</param>
-        /// <param name="numIterationsPerGroup">The number of iterations per group to compute the tile size.</param>
+        /// <param name="numIterationsPerGroup">
+        /// The number of iterations per group to compute the tile size.
+        /// </param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public TileInfo(ArrayView<T> input, Index1 numIterationsPerGroup)
         {

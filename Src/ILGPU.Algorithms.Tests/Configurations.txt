@@ -1,5 +1,6 @@
 ﻿ArrayExtensionTests: Debug, Release
 GroupExtensionTests: Debug, Release
+﻿HistogramTests: Debug, Release
 InitializeTests: Debug, Release
 RadixSortExtensionTests: Debug, Release
 ReductionExtensionTests: Debug, Release

@@ -1,13 +1,13 @@
-﻿// -----------------------------------------------------------------------------
-//                             ILGPU.Algorithms
-//                  Copyright (c) 2019 ILGPU Algorithms Project
-//                                www.ilgpu.net
+﻿// ---------------------------------------------------------------------------------------
+//                                   ILGPU.Algorithms
+//                      Copyright (c) 2019 ILGPU Algorithms Project
+//                                    www.ilgpu.net
 //
 // File: ILContext.cs
 //
-// This file is part of ILGPU and is distributed under the University of
-// Illinois Open Source License. See LICENSE.txt for details.
-// -----------------------------------------------------------------------------
+// This file is part of ILGPU and is distributed under the University of Illinois Open
+// Source License. See LICENSE.txt for details
+// ---------------------------------------------------------------------------------------
 
 using ILGPU.Backends;
 using ILGPU.Backends.IL;
@@ -61,7 +61,9 @@ namespace ILGPU.Algorithms.IL
             Type targetType,
             string name)
         {
-            var sourceMethod = sourceType.GetMethod(name, AlgorithmContext.IntrinsicBindingFlags);
+            var sourceMethod = sourceType.GetMethod(
+                name,
+                AlgorithmContext.IntrinsicBindingFlags);
             manager.RegisterMethod(
                 sourceMethod,
                 new ILIntrinsic(targetType, name, IntrinsicImplementationMode.Redirect));

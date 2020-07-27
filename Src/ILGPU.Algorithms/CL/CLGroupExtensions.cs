@@ -1,13 +1,13 @@
-﻿// -----------------------------------------------------------------------------
-//                             ILGPU.Algorithms
-//                  Copyright (c) 2019 ILGPU Algorithms Project
-//                                www.ilgpu.net
+﻿// ---------------------------------------------------------------------------------------
+//                                   ILGPU.Algorithms
+//                      Copyright (c) 2019 ILGPU Algorithms Project
+//                                    www.ilgpu.net
 //
 // File: CLGroupExtensions.cs
 //
-// This file is part of ILGPU and is distributed under the University of
-// Illinois Open Source License. See LICENSE.txt for details.
-// -----------------------------------------------------------------------------
+// This file is part of ILGPU and is distributed under the University of Illinois Open
+// Source License. See LICENSE.txt for details
+// ---------------------------------------------------------------------------------------
 
 using ILGPU.Algorithms.ScanReduceOperations;
 using ILGPU.Backends.OpenCL;
@@ -106,9 +106,12 @@ namespace ILGPU.Algorithms.CL
                 value,
                 "work_group_scan_inclusive_");
 
-        /// <summary cref="GroupExtensions.ExclusiveScanWithBoundaries{T, TScanOperation}(T, out ScanBoundaries{T})"/>
+        /// <summary cref="GroupExtensions.ExclusiveScanWithBoundaries{T, TScanOperation}(
+        /// T, out ScanBoundaries{T})"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T ExclusiveScanWithBoundaries<T, TScanOperation>(T value, out ScanBoundaries<T> boundaries)
+        public static T ExclusiveScanWithBoundaries<T, TScanOperation>(
+            T value,
+            out ScanBoundaries<T> boundaries)
             where T : unmanaged
             where TScanOperation : struct, IScanReduceOperation<T>
         {
@@ -119,9 +122,12 @@ namespace ILGPU.Algorithms.CL
             return scanned;
         }
 
-        /// <summary cref="GroupExtensions.InclusiveScanWithBoundaries{T, TScanOperation}(T, out ScanBoundaries{T})"/>
+        /// <summary cref="GroupExtensions.InclusiveScanWithBoundaries{T, TScanOperation}(
+        /// T, out ScanBoundaries{T})"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T InclusiveScanWithBoundaries<T, TScanOperation>(T value, out ScanBoundaries<T> boundaries)
+        public static T InclusiveScanWithBoundaries<T, TScanOperation>(
+            T value,
+            out ScanBoundaries<T> boundaries)
             where T : unmanaged
             where TScanOperation : struct, IScanReduceOperation<T>
         {

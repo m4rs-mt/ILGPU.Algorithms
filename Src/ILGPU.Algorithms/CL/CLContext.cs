@@ -1,13 +1,13 @@
-﻿// -----------------------------------------------------------------------------
-//                             ILGPU.Algorithms
-//                  Copyright (c) 2019 ILGPU Algorithms Project
-//                                www.ilgpu.net
+﻿// ---------------------------------------------------------------------------------------
+//                                   ILGPU.Algorithms
+//                      Copyright (c) 2019 ILGPU Algorithms Project
+//                                    www.ilgpu.net
 //
 // File: CLContext.cs
 //
-// This file is part of ILGPU and is distributed under the University of
-// Illinois Open Source License. See LICENSE.txt for details.
-// -----------------------------------------------------------------------------
+// This file is part of ILGPU and is distributed under the University of Illinois Open
+// Source License. See LICENSE.txt for details
+// ---------------------------------------------------------------------------------------
 
 using ILGPU.Algorithms.ScanReduceOperations;
 using ILGPU.Backends;
@@ -32,7 +32,8 @@ namespace ILGPU.Algorithms.CL
         private static readonly Type CLMathType = typeof(CLMath);
 
         /// <summary>
-        /// Represents the <see cref="CLMath.GenerateMathIntrinsic(CLBackend, CLCodeGenerator, IR.Value)"/>
+        /// Represents the <see cref="CLMath.GenerateMathIntrinsic(CLBackend,
+        /// CLCodeGenerator, IR.Value)"/>
         /// methods.
         /// </summary>
         private static readonly MethodInfo MathCodeGenerator =
@@ -41,7 +42,8 @@ namespace ILGPU.Algorithms.CL
                 AlgorithmContext.IntrinsicBindingFlags);
 
         /// <summary>
-        /// Represents the intrinsic representation of the <see cref="MathCodeGenerator"/>.
+        /// Represents the intrinsic representation of the
+        /// <see cref="MathCodeGenerator"/>.
         /// </summary>
         private static readonly CLIntrinsic MathCodeGeneratorIntrinsic =
             new CLIntrinsic(
@@ -88,7 +90,9 @@ namespace ILGPU.Algorithms.CL
             Type targetType,
             string name)
         {
-            var sourceMethod = sourceType.GetMethod(name, AlgorithmContext.IntrinsicBindingFlags);
+            var sourceMethod = sourceType.GetMethod(
+                name,
+                AlgorithmContext.IntrinsicBindingFlags);
             manager.RegisterMethod(
                 sourceMethod,
                 new CLIntrinsic(targetType, name, IntrinsicImplementationMode.Redirect));
@@ -101,7 +105,9 @@ namespace ILGPU.Algorithms.CL
         /// <param name="sourceType">The source type.</param>
         /// <param name="targetType">The target type.</param>
         /// <param name="name">The method name to register.</param>
-        /// <param name="codeGeneratorName">The name of the code generator to register.</param>
+        /// <param name="codeGeneratorName">
+        /// The name of the code generator to register.
+        /// </param>
         private static void RegisterIntrinsicCodeGenerator(
             IntrinsicImplementationManager manager,
             Type sourceType,
@@ -109,10 +115,15 @@ namespace ILGPU.Algorithms.CL
             string name,
             string codeGeneratorName)
         {
-            var sourceMethod = sourceType.GetMethod(name, AlgorithmContext.IntrinsicBindingFlags);
+            var sourceMethod = sourceType.GetMethod(
+                name,
+                AlgorithmContext.IntrinsicBindingFlags);
             manager.RegisterMethod(
                 sourceMethod,
-                new CLIntrinsic(targetType, codeGeneratorName, IntrinsicImplementationMode.GenerateCode));
+                new CLIntrinsic(
+                    targetType,
+                    codeGeneratorName,
+                    IntrinsicImplementationMode.GenerateCode));
         }
 
         /// <summary>
@@ -144,13 +155,11 @@ namespace ILGPU.Algorithms.CL
             if (string.IsNullOrWhiteSpace(clCommand))
                 throw new InvalidCodeGenerationException();
 
-            using (var statement = codeGenerator.BeginStatement(target))
-            {
-                statement.AppendCommand(scanReduceOperation + clCommand);
-                statement.BeginArguments();
-                statement.Append(sourceValue);
-                statement.EndArguments();
-            }
+            using var statement = codeGenerator.BeginStatement(target);
+            statement.AppendCommand(scanReduceOperation + clCommand);
+            statement.BeginArguments();
+            statement.Append(sourceValue);
+            statement.EndArguments();
         }
     }
 }
