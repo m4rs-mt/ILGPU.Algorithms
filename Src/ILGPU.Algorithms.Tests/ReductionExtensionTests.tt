@@ -110,7 +110,10 @@ namespace ILGPU.Algorithms.Tests
 #>
         [Theory]
         [MemberData(nameof(<#= sorting.Name #>TestData))]
-        public void Reduce<#= sorting.Name  #>SeqWithMemoryCache<T, TReduceFunc, TSequencer>(
+        public void Reduce<#= sorting.Name #>SeqWithMemoryCache<
+            T,
+            TReduceFunc,
+            TSequencer>(
             T _,
             TReduceFunc func,
             TSequencer sequencer,
@@ -150,8 +153,11 @@ namespace ILGPU.Algorithms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(<#= sorting.Name  #>TestData))]
-        public void Reduce<#= sorting.Name  #>SeqWithOutputBuffer<T, TReduceFunc, TSequencer>(
+        [MemberData(nameof(<#= sorting.Name #>TestData))]
+        public void Reduce<#= sorting.Name #>SeqWithOutputBuffer<
+            T,
+            TReduceFunc,
+            TSequencer>(
             T _,
             TReduceFunc func,
             TSequencer sequencer,

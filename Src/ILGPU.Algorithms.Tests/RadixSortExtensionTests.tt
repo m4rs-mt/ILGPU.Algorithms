@@ -191,7 +191,10 @@ namespace ILGPU.Algorithms.Tests
 
         [Theory]
         [MemberData(nameof(<#= sorting.Name #>TestData))]
-        public void RadixProviderWorstCase<#= sorting.Name #><T, TRadixSortOp, TSequencer>(
+        public void RadixProviderWorstCase<#= sorting.Name #><
+            T,
+            TRadixSortOp,
+            TSequencer>(
             T _,
             TRadixSortOp radixSortOp,
             TSequencer sequencer,
