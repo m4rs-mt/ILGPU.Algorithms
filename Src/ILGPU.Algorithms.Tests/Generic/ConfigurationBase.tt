@@ -4,8 +4,35 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ include file="../../ILGPU.Algorithms/TypeInformation.ttinclude" #>
 <#+
-    // Scan and Reduce struct
+    public enum SequenceSortingKind
+    {
+        Ascending,
+        Constant,
+        Descending,
+    }
 
+    public class SortingInformation
+    {
+        public SortingInformation(
+            string name,
+            SequenceSortingKind kind)
+        {
+            Name = name;
+            Kind = kind;
+        }
+
+    public string Name { get; }
+
+    public SequenceSortingKind Kind { get; }
+
+    public bool IsAscendingSorting => Kind == SequenceSortingKind.Ascending;
+
+    public bool IsConstantSorting => Kind == SequenceSortingKind.Constant;
+
+    public bool IsDescendingSorting => Kind == SequenceSortingKind.Descending;
+};
+
+    // Scan and Reduce struct
     public struct ScanReduceOperation
     {
         public ScanReduceOperation(

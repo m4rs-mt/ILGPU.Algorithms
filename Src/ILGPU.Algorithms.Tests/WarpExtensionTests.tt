@@ -16,7 +16,6 @@ using Xunit.Abstractions;
 
 namespace ILGPU.Algorithms.Tests
 {
-
     public abstract partial class WarpExtensionTests : TestBase
     {
         protected WarpExtensionTests(ITestOutputHelper output, TestContext testContext)

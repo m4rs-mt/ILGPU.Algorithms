@@ -14,7 +14,6 @@ using Xunit.Abstractions;
 
 namespace ILGPU.Algorithms.Tests
 {
-
     public abstract partial class RadixSortExtensionTests : TestBase
     {
         protected RadixSortExtensionTests(
@@ -90,12 +89,17 @@ namespace ILGPU.Algorithms.Tests
         #endregion
 
 <#
-        string[] orders = { "Ascending", "Descending" };
-        foreach (var order in orders) {
+        SortingInformation[] sortings =
+        {
+            new SortingInformation("Ascending", SequenceSortingKind.Ascending),
+            new SortingInformation("Descending", SequenceSortingKind.Descending),
+        };
+
+        foreach (var sorting in sortings) {
 #>
         [Theory]
-        [MemberData(nameof(<#= order #>TestData))]
-        public void RadixWorstCase<#= order #><T, TRadixSortOp, TSequencer>(
+        [MemberData(nameof(<#= sorting.Name #>TestData))]
+        public void RadixWorstCase<#= sorting.Name #><T, TRadixSortOp, TSequencer>(
             T _,
             TRadixSortOp radixSortOp,
             TSequencer sequencer,
@@ -110,7 +114,7 @@ namespace ILGPU.Algorithms.Tests
             using var stream = Accelerator.CreateStream();
 
 <#
-            if (order == "Ascending") {
+            if (sorting.IsAscendingSorting) {
 #>
             var sequence = sequencer.ComputeInvertedSequence(start, stepSize, length);
             var expected = sequencer.ComputeSequence(start, stepSize, length);
@@ -141,8 +145,8 @@ namespace ILGPU.Algorithms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(<#= order #>TestData))]
-        public void RadixBestCase<#= order #><T, TRadixSortOp, TSequencer>(
+        [MemberData(nameof(<#= sorting.Name #>TestData))]
+        public void RadixBestCase<#= sorting.Name #><T, TRadixSortOp, TSequencer>(
             T _,
             TRadixSortOp radixSortOp,
             TSequencer sequencer,
@@ -157,7 +161,7 @@ namespace ILGPU.Algorithms.Tests
             using var stream = Accelerator.CreateStream();
 
 <#
-            if (order == "Descending") {
+            if (sorting.IsDescendingSorting) {
 #>
             var sequence = sequencer.ComputeInvertedSequence(start, stepSize, length);
 <#
@@ -186,8 +190,8 @@ namespace ILGPU.Algorithms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(<#= order #>TestData))]
-        public void RadixProviderWorstCase<#= order #><T, TRadixSortOp, TSequencer>(
+        [MemberData(nameof(<#= sorting.Name #>TestData))]
+        public void RadixProviderWorstCase<#= sorting.Name #><T, TRadixSortOp, TSequencer>(
             T _,
             TRadixSortOp radixSortOp,
             TSequencer sequencer,
@@ -202,7 +206,7 @@ namespace ILGPU.Algorithms.Tests
             using var stream = Accelerator.CreateStream();
 
 <#
-            if (order == "Ascending") {
+            if (sorting.IsAscendingSorting) {
 #>
             var sequence = sequencer.ComputeInvertedSequence(start, stepSize, length);
             var expected = sequencer.ComputeSequence(start, stepSize, length);
@@ -232,8 +236,8 @@ namespace ILGPU.Algorithms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(<#= order #>TestData))]
-        public void RadixProviderBestCase<#= order #><T, TRadixSortOp, TSequencer>(
+        [MemberData(nameof(<#= sorting.Name #>TestData))]
+        public void RadixProviderBestCase<#= sorting.Name #><T, TRadixSortOp, TSequencer>(
             T _,
             TRadixSortOp radixSortOp,
             TSequencer sequencer,
@@ -248,7 +252,7 @@ namespace ILGPU.Algorithms.Tests
             using var stream = Accelerator.CreateStream();
 
 <#
-            if (order == "Descending") {
+            if (sorting.IsDescendingSorting) {
 #>
             var sequence = sequencer.ComputeInvertedSequence(start, stepSize, length);
 <#

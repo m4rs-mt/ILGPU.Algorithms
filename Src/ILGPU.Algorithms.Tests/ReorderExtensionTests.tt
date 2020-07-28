@@ -13,7 +13,6 @@ using Xunit.Abstractions;
 
 namespace ILGPU.Algorithms.Tests
 {
-
     public abstract partial class ReorderExtensionTests : TestBase
     {
         protected ReorderExtensionTests(

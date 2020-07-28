@@ -16,7 +16,6 @@ using Xunit.Abstractions;
 
 namespace ILGPU.Algorithms.Tests
 {
-
     public abstract partial class GroupExtensionTests : TestBase
     {
         protected GroupExtensionTests(ITestOutputHelper output, TestContext testContext)
@@ -26,7 +25,7 @@ namespace ILGPU.Algorithms.Tests
 <#
         var types = SignedIntTypes.Skip(2).Concat(
             UnsignedIntTypes.Skip(2)).Concat(FloatTypes).ToArray();
-        int[] fractions = { 1, 2, 4};
+        int[] fractions = { 1, 2, 4 };
 #>
         #region Kernel implementation
 

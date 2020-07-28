@@ -6,6 +6,7 @@
 
 using ILGPU.Algorithms.RadixSortOperations;
 using ILGPU.Algorithms.ScanReduceOperations;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using Xunit.Abstractions;
 
@@ -45,6 +46,7 @@ namespace ILGPU.Algorithms.Tests
     public interface ITestSequencer<T> : IXunitSerializable
     {
         public T[] ComputeSequence(T start, T stepSize, int length);
+
         public T[] ComputeInvertedSequence(T start, T stepSize, int length);
     }
 
@@ -67,6 +69,7 @@ namespace ILGPU.Algorithms.Tests
                 sequence[i] = sequence[i-1] + stepSize;
             return sequence;
         }
+
         public <#= type.Type #>[] ComputeInvertedSequence(
             <#= type.Type #> start,
             <#= type.Type #> stepSize,
@@ -78,7 +81,9 @@ namespace ILGPU.Algorithms.Tests
                 sequence[i] = sequence[i+1] + stepSize;
             return sequence;
         }
+
         public void Deserialize(IXunitSerializationInfo info) { }
+
         public void Serialize(IXunitSerializationInfo info) { }
     }
 
@@ -95,6 +100,7 @@ namespace ILGPU.Algorithms.Tests
                 sequence[i] = sequence[i-1] + stepSize;
             return sequence;
         }
+
         public Index1[] ComputeInvertedSequence(
             Index1 start,
             Index1 stepSize,
@@ -106,7 +112,9 @@ namespace ILGPU.Algorithms.Tests
                 sequence[i] = sequence[i+1] + stepSize;
             return sequence;
         }
+
         public void Deserialize(IXunitSerializationInfo info) { }
+
         public void Serialize(IXunitSerializationInfo info) { }
     }
 
@@ -121,12 +129,17 @@ namespace ILGPU.Algorithms.Tests
         : IScanReduceOperation<<#= type.Type #>>, IXunitSerializable
     {
         public string CLCommand => "add";
+
         public <#= type.Type #> Identity => 0;
+
         public <#= type.Type #> Apply(<#=type.Type#> first, <#=type.Type#> second) =>
             (<#= type.Type #>)(first + second);
+
         public void AtomicApply(ref <#=type.Type#> target, <#=type.Type#> value) =>
             Atomic.Add(ref target, value);
+
         public void Deserialize(IXunitSerializationInfo info) { }
+
         public void Serialize(IXunitSerializationInfo info) { }
     }
 
@@ -134,12 +147,17 @@ namespace ILGPU.Algorithms.Tests
         : IScanReduceOperation<<#= type.Type #>>, IXunitSerializable
     {
         public string CLCommand => "max";
+
         public <#= type.Type #> Identity => <#= type.Type #>.MinValue;
+
         public <#= type.Type #> Apply(<#=type.Type#> first, <#=type.Type#> second) =>
             (<#= type.Type #>)(XMath.Max(first, second));
+
         public void AtomicApply(ref <#=type.Type#> target, <#=type.Type#> value) =>
             Atomic.Max(ref target, value);
+
         public void Deserialize(IXunitSerializationInfo info) { }
+
         public void Serialize(IXunitSerializationInfo info) { }
     }
 
@@ -147,12 +165,17 @@ namespace ILGPU.Algorithms.Tests
         : IScanReduceOperation<<#= type.Type #>>, IXunitSerializable
     {
         public string CLCommand => "min";
+
         public <#= type.Type #> Identity => <#= type.Type #>.MaxValue;
+
         public <#= type.Type #> Apply(<#=type.Type#> first, <#=type.Type#> second) =>
             (<#= type.Type #>)(XMath.Min(first, second));
+
         public void AtomicApply(ref <#=type.Type#> target, <#=type.Type#> value) =>
             Atomic.Min(ref target, value);
+
         public void Deserialize(IXunitSerializationInfo info) { }
+
         public void Serialize(IXunitSerializationInfo info) { }
     }
 <#
@@ -167,7 +190,9 @@ namespace ILGPU.Algorithms.Tests
         : ITransformer<int, long>, IXunitSerializable
     {
         public long Transform(int value) => value;
+
         public void Deserialize(IXunitSerializationInfo info) { }
+
         public void Serialize(IXunitSerializationInfo info) { }
     }
 
@@ -175,7 +200,9 @@ namespace ILGPU.Algorithms.Tests
         : ITransformer<uint, ulong>, IXunitSerializable
     {
         public ulong Transform(uint value) => value;
+
         public void Deserialize(IXunitSerializationInfo info) { }
+
         public void Serialize(IXunitSerializationInfo info) { }
     }
 
@@ -183,7 +210,9 @@ namespace ILGPU.Algorithms.Tests
         : ITransformer<int, int>, IXunitSerializable
     {
         public int Transform(int value) => -value;
+
         public void Deserialize(IXunitSerializationInfo info) { }
+
         public void Serialize(IXunitSerializationInfo info) { }
     }
 
@@ -191,7 +220,9 @@ namespace ILGPU.Algorithms.Tests
         : ITransformer<uint, int>, IXunitSerializable
     {
         public int Transform(uint value) => (int)~value;
+
         public void Deserialize(IXunitSerializationInfo info) { }
+
         public void Serialize(IXunitSerializationInfo info) { }
     }
 
@@ -199,7 +230,9 @@ namespace ILGPU.Algorithms.Tests
         : ITransformer<ulong, long>, IXunitSerializable
     {
         public long Transform(ulong value) => (long)~value;
+
         public void Deserialize(IXunitSerializationInfo info) { }
+
         public void Serialize(IXunitSerializationInfo info) { }
     }
 
@@ -210,7 +243,9 @@ namespace ILGPU.Algorithms.Tests
         : ITransformer<<#= type.Type #>, <#= type.Type #>>, IXunitSerializable
     {
         public <#= type.Type #> Transform(<#= type.Type #> value) => value * 2;
+
         public void Deserialize(IXunitSerializationInfo info) { }
+
         public void Serialize(IXunitSerializationInfo info) { }
     }
 <#
@@ -234,7 +269,9 @@ namespace ILGPU.Algorithms.Tests
 <#
         }
 #>
+
         public void Deserialize(IXunitSerializationInfo info) { }
+
         public void Serialize(IXunitSerializationInfo info) { }
     }
 <#
@@ -252,6 +289,7 @@ namespace ILGPU.Algorithms.Tests
         : IRadixSortOperation<<#= type.Type #>>, IXunitSerializable
     {
         public int NumBits => sizeof(<#= type.Type #>) * 8;
+
         public <#= type.Type #> DefaultValue => 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -259,6 +297,7 @@ namespace ILGPU.Algorithms.Tests
             (int)(value >> shift) & bitMask;
 
         public void Deserialize(IXunitSerializationInfo info) { }
+
         public void Serialize(IXunitSerializationInfo info) { }
     }
 
@@ -266,6 +305,7 @@ namespace ILGPU.Algorithms.Tests
         : IRadixSortOperation<<#= type.Type #>>, IXunitSerializable
     {
         public int NumBits => sizeof(<#= type.Type #>) * 8;
+
         public <#= type.Type #> DefaultValue => 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -276,12 +316,260 @@ namespace ILGPU.Algorithms.Tests
         }
 
         public void Deserialize(IXunitSerializationInfo info) { }
+
         public void Serialize(IXunitSerializationInfo info) { }
     }
 
 <#  
     }
 #>
+    #endregion
+
+    #region Xunit Vectors
+
+    #region Vector2
+
+    internal readonly struct Vector2Zero : IVector<Vector2>
+    {
+        Vector2 IVector<Vector2>.GetVector() => Vector2.Zero;
+
+        public void Deserialize(IXunitSerializationInfo info) { } 
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    internal readonly struct Vector2One : IVector<Vector2>
+    {
+        Vector2 IVector<Vector2>.GetVector() => Vector2.One;
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    internal readonly struct Vector2UnitX : IVector<Vector2>
+    {
+        Vector2 IVector<Vector2>.GetVector() => Vector2.UnitX;
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    internal readonly struct Vector2UnitY : IVector<Vector2>
+    {
+        Vector2 IVector<Vector2>.GetVector() => Vector2.UnitY;
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    #endregion
+
+    #region Vector3
+
+    internal readonly struct Vector3Zero : IVector<Vector3>
+    {
+        Vector3 IVector<Vector3>.GetVector() => Vector3.Zero;
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    internal readonly struct Vector3One : IVector<Vector3>
+    {
+        Vector3 IVector<Vector3>.GetVector() => Vector3.One;
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    internal readonly struct Vector3UnitX : IVector<Vector3>
+    {
+        Vector3 IVector<Vector3>.GetVector() => Vector3.UnitX;
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    internal readonly struct Vector3UnitY : IVector<Vector3>
+    {
+        Vector3 IVector<Vector3>.GetVector() => Vector3.UnitY;
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    internal readonly struct Vector3UnitZ : IVector<Vector3>
+    {
+        Vector3 IVector<Vector3>.GetVector() => Vector3.UnitZ;
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    #endregion
+
+    #region Vector4
+
+    internal readonly struct Vector4Zero : IVector<Vector4>
+    {
+        Vector4 IVector<Vector4>.GetVector() => Vector4.Zero;
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    internal readonly struct Vector4One : IVector<Vector4>
+    {
+        Vector4 IVector<Vector4>.GetVector() => Vector4.One;
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    internal readonly struct Vector4UnitX : IVector<Vector4>
+    {
+        Vector4 IVector<Vector4>.GetVector() => Vector4.UnitX;
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    internal readonly struct Vector4UnitY : IVector<Vector4>
+    {
+        Vector4 IVector<Vector4>.GetVector() => Vector4.UnitY;
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    internal readonly struct Vector4UnitZ : IVector<Vector4>
+    {
+        Vector4 IVector<Vector4>.GetVector() => Vector4.UnitZ;
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    internal readonly struct Vector4UnitW : IVector<Vector4>
+    {
+        Vector4 IVector<Vector4>.GetVector() => Vector4.UnitW;
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    #endregion
+
+    #endregion
+
+    #region VectorSequencer
+
+    internal readonly struct Vector2DSequencer : ITestSequencer<Vector2>
+    {
+        public Vector2[] ComputeSequence(
+            Vector2 start,
+            Vector2 stepSize,
+            int length)
+        {
+            Vector2[] sequence = new Vector2[length];
+            sequence[0] = start;
+            for (int i = 1; i < length; ++i)
+                sequence[i] = sequence[i - 1] + stepSize;
+            return sequence;
+        }
+
+        public Vector2[] ComputeInvertedSequence(
+            Vector2 start,
+            Vector2 stepSize,
+            int length)
+        {
+            Vector2[] sequence = new Vector2[length];
+            sequence[length - 1] = start;
+            for (int i = length - 2; i >= 0; --i)
+                sequence[i] = sequence[i + 1] + stepSize;
+            return sequence;
+        }
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    internal readonly struct Vector3DSequencer : ITestSequencer<Vector3>
+    {
+        public Vector3[] ComputeSequence(
+            Vector3 start,
+            Vector3 stepSize,
+            int length)
+        {
+            Vector3[] sequence = new Vector3[length];
+            sequence[0] = start;
+            for (int i = 1; i < length; ++i)
+                sequence[i] = sequence[i - 1] + stepSize;
+            return sequence;
+        }
+
+        public Vector3[] ComputeInvertedSequence(
+            Vector3 start,
+            Vector3 stepSize,
+            int length)
+        {
+            Vector3[] sequence = new Vector3[length];
+            sequence[length - 1] = start;
+            for (int i = length - 2; i >= 0; --i)
+                sequence[i] = sequence[i + 1] + stepSize;
+            return sequence;
+        }
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
+
+    internal readonly struct Vector4DSequencer : ITestSequencer<Vector4>
+    {
+        public Vector4[] ComputeSequence(
+            Vector4 start,
+            Vector4 stepSize,
+            int length)
+        {
+            Vector4[] sequence = new Vector4[length];
+            sequence[0] = start;
+            for (int i = 1; i < length; ++i)
+                sequence[i] = sequence[i - 1] + stepSize;
+            return sequence;
+        }
+
+        public Vector4[] ComputeInvertedSequence(
+            Vector4 start,
+            Vector4 stepSize,
+            int length)
+        {
+            Vector4[] sequence = new Vector4[length];
+            sequence[length - 1] = start;
+            for (int i = length - 2; i >= 0; --i)
+                sequence[i] = sequence[i + 1] + stepSize;
+            return sequence;
+        }
+
+        public void Deserialize(IXunitSerializationInfo info) { }
+
+        public void Serialize(IXunitSerializationInfo info) { }
+    }
 
     #endregion
 }

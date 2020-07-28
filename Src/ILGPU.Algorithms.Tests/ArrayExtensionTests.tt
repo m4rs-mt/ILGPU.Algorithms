@@ -13,7 +13,6 @@ using Xunit.Abstractions;
 
 namespace ILGPU.Algorithms.Tests
 {
-
     public abstract partial class ArrayExtensionTests : TestBase
     {
         protected ArrayExtensionTests(ITestOutputHelper output, TestContext testContext)
@@ -74,7 +73,6 @@ namespace ILGPU.Algorithms.Tests
         {
             T[] dummy = new T[lenX];
             Index1 actual = ArrayExtensions.GetExtent(dummy);
-
             Assert.Equal(lenX, actual.X);
         }
 
@@ -85,7 +83,6 @@ namespace ILGPU.Algorithms.Tests
         {
             T[,] dummy = new T[lenX, lenY];
             Index2 actual = ArrayExtensions.GetExtent(dummy);
-
             Assert.Equal(lenX, actual.X);
             Assert.Equal(lenY, actual.Y);
         }
@@ -97,7 +94,6 @@ namespace ILGPU.Algorithms.Tests
         {
             T[,,] dummy = new T[lenX, lenY, lenZ];
             Index3 actual = ArrayExtensions.GetExtent(dummy);
-
             Assert.Equal(lenX, actual.X);
             Assert.Equal(lenY, actual.Y);
             Assert.Equal(lenZ, actual.Z);
