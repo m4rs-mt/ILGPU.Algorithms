@@ -343,7 +343,7 @@ namespace ILGPU.Algorithms.Tests
     {
         public Vector<#= i #> GetVector() => Vector<#= i #>.Zero;
 
-        public void Deserialize(IXunitSerializationInfo info) { } 
+        public void Deserialize(IXunitSerializationInfo info) { }
 
         public void Serialize(IXunitSerializationInfo info) { }
     }
