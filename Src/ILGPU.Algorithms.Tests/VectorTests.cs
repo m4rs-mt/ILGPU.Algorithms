@@ -6,12 +6,6 @@ using Xunit.Abstractions;
 
 namespace ILGPU.Algorithms.Tests
 {
-    public interface IVector<T> : IXunitSerializable
-        where T : struct
-    {
-        T GetVector();
-    }
-    
     public abstract partial class VectorTests : TestBase
     {
         protected VectorTests(ITestOutputHelper output, TestContext testContext)
