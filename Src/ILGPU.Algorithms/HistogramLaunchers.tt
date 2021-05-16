@@ -35,11 +35,12 @@ namespace ILGPU.Algorithms
         #region Histogram <#= type.Name #> Launchers
 
 <# for (int i = 1; i <= 3; ++i) { #>
-<#      var dimension = i > 1 ? $"{i}D" : ""; #>
+<#      var dimension = $"{i}D"; #>
         /// <summary>
         /// Calculates the histogram (<#= type.Type #>) on the given <#= i #>D view.
         /// </summary>
         /// <typeparam name="T">The input view element type.</typeparam>
+        /// <typeparam name="TStride">The input view element type.</typeparam>
         /// <typeparam name="TLocator">
         /// The operation to compute the bin location.
         /// </typeparam>
@@ -53,22 +54,40 @@ namespace ILGPU.Algorithms
 <# if (!type.IsCLSCompliant) { #>
         [CLSCompliant(false)]
 <# } #>
-        public static void Histogram<#= dimension #><T, TLocator>(
+        public static void Histogram<#= dimension #><T, TStride, TLocator>(
             this Accelerator accelerator,
             AcceleratorStream stream,
-            ArrayView<#= dimension #><T> view,
+            ArrayView<#= dimension #><T, TStride> view,
             ArrayView<<#= type.Type #>> histogram,
             ArrayView<int> histogramOverflow)
             where T : unmanaged
-            where TLocator : struct, IComputeSingleBinOperation<T, Index1>
+            where TStride : unmanaged, IStride<#= dimension #>
+            where TLocator : struct, IComputeSingleBinOperation<T, Index1D>
         {
+<# if (i > 1) { #>
             var kernel = accelerator.CreateHistogram<
                 T,
-                Index<#= i #>,
+                Stride1D.General,
                 <#= type.Type #>,
                 HistogramIncrement<#= type.Name #>,
                 ComputeSingleBinAdapter<#= type.Name #><T, TLocator>>();
-            kernel(stream, view.ToIntView(), histogram, histogramOverflow);
+            // TODO: needs to be refined and fixed once a patch for ILGPU is available
+            var generalStride = new Stride1D.General(
+                view.Stride.StrideExtent.Size);
+            var inputView = new ArrayView1D<T, Stride1D.General>();
+            // TODO: this does not compile since the constructor is not accessible
+            // view.BaseView,
+            // generalStride);
+            kernel(stream, inputView, histogram, histogramOverflow);
+<# } else { #>
+            var kernel = accelerator.CreateHistogram<
+                T,
+                TStride,
+                <#= type.Type #>,
+                HistogramIncrement<#= type.Name #>,
+                ComputeSingleBinAdapter<#= type.Name #><T, TLocator>>();
+            kernel(stream, view, histogram, histogramOverflow);
+<# } #>
         }
 
 <# } #>
@@ -88,7 +107,7 @@ namespace ILGPU.Algorithms
                 <#= type.Type #>,
                 HistogramIncrement<#= type.Name #>>
             where T : unmanaged
-            where TLocator : struct, IComputeSingleBinOperation<T, Index1>
+            where TLocator : struct, IComputeSingleBinOperation<T, Index1D>
         {
             public void ComputeHistogramBins(
                 T value,
