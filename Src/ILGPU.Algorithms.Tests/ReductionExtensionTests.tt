@@ -122,7 +122,7 @@ namespace ILGPU.Algorithms.Tests
             where TReduceFunc : struct, IScanReduceOperation<T>
             where TSequencer : struct, ITestSequencer<T>
         {
-            using var input = Accelerator.Allocate<T>(length);
+            using var input = Accelerator.Allocate1D<T>(length);
             using var stream = Accelerator.CreateStream();
 
 <#
@@ -136,14 +136,9 @@ namespace ILGPU.Algorithms.Tests
 <#
             }
 #>
-            input.CopyFrom(
-                stream,
-                sequence,
-                0,
-                0,
-                length);
+            input.CopyFromCPU(stream, sequence);
 
-            T actual = Accelerator.Reduce<T, TReduceFunc>(stream, input);
+            T actual = Accelerator.Reduce<T, TReduceFunc>(stream, input.View);
             stream.Synchronize();
             T expected = CalcValue(sequence, func.Apply);
 
@@ -166,8 +161,8 @@ namespace ILGPU.Algorithms.Tests
             where TReduceFunc : struct, IScanReduceOperation<T>
             where TSequencer : struct, ITestSequencer<T>
         {
-            using var input = Accelerator.Allocate<T>(length);
-            using var output = Accelerator.Allocate<T>(length);
+            using var input = Accelerator.Allocate1D<T>(length);
+            using var output = Accelerator.Allocate1D<T>(length);
             using var stream = Accelerator.CreateStream();
             
 <#
@@ -181,20 +176,15 @@ namespace ILGPU.Algorithms.Tests
 <#
             }
 #>
-            input.CopyFrom(
-                stream,
-                sequence,
-                0,
-                0,
-                length);
+            input.CopyFromCPU(stream, sequence);
 
-            Accelerator.Reduce<T, TReduceFunc>(stream, input, output);
+            Accelerator.Reduce<T, TReduceFunc>(stream, input.View, output.View);
             stream.Synchronize();
 
             T[] expected = new T[1];
             expected[0] = CalcValue(sequence, func.Apply);
 
-            Verify(output, expected, 0, 1);
+            Verify(output.View, expected, 0, 1);
         }
 <#
         }
