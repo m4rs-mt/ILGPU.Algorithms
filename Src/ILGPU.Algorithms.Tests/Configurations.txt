@@ -1,6 +1,6 @@
 ﻿ArrayExtensionTests: Debug, Release, O2
 GroupExtensionTests: Debug, Release, O2
-﻿HistogramTests: Debug, Release, O2
+// ﻿HistogramTests: Debug, Release, O2
 InitializeTests: Debug, Release, O2
 RadixSortExtensionTests: Debug, Release, O2
 RandomTests: Debug, Release, O2
