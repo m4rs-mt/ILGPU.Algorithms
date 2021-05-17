@@ -13,7 +13,6 @@
 <#@ include file="XMathTests.ttinclude" #>
 <#@ assembly name="System.Core" #>
 <#@ import namespace="System.IO" #>
-<#@ output extension=".cs" #>
 using ILGPU.Runtime;
 using ILGPU.Tests;
 using System;
