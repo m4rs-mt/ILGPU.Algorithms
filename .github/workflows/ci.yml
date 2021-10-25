@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+env:
+  DOTNET_NOLOGO: true
+
 jobs:
   check-style:
     runs-on: windows-latest
@@ -64,13 +67,15 @@ jobs:
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 3.1.300
-      - name: Restore tools
-        run: dotnet tool restore
-        working-directory: ./Src
-      - name: Build templates
-        # TargetFramework specified so this only runs once rather than per framework
-        run: dotnet msbuild -t:TextTemplateTransform -p:TargetFramework=NA Src
+          dotnet-version: 3.1.407
+      - name: Pin .NET Core SDK
+        run: dotnet new globaljson --sdk-version 3.1.407
+        # WORKAROUND: Reset NuGet sources to default to avoid restore issues
+        # on Windows runners where the Visual Studio offline source seems to
+        # cause random issues.
+      - name: Reset NuGet sources
+        if: runner.os == 'Windows'
+        run: dotnet new nugetconfig
       - name: Release Build
         run: dotnet build --configuration=Release -p:TreatWarningsAsErrors=true Src
       - name: CPU Tests
@@ -86,7 +91,12 @@ jobs:
               exit 1
             }
           } else {
-            $params = "--version-suffix", $(git rev-parse --short HEAD)
+            # WORKAROUND: Add letter prefix to ensure that MSBuild treats
+            # the suffix as a string. e.g. '0313071' will fail as an invalid
+            # version string, but 'G0313071' will succeeded. It looks like
+            # the parser does not like numbers with a leading zero.
+            $suffix = 'g' + $(git rev-parse --short HEAD)
+            $params = "--version-suffix", $suffix
           }
           dotnet pack --configuration=Release -o . @params Src
       - name: Fix NuGet Symbols Package

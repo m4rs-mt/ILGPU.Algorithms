@@ -9,10 +9,14 @@
     <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Channel)' == 'experimental'">
+    <TargetFrameworks>$(TargetFrameworks);net5.0</TargetFrameworks>
+  </PropertyGroup>
+
   <PropertyGroup>
-    <VersionPrefix>0.9.2</VersionPrefix>
-    <AssemblyVersion>0.9.2.0</AssemblyVersion>
-    <FileVersion>0.9.2.0</FileVersion>
+    <VersionPrefix>1.0-beta1</VersionPrefix>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -48,12 +52,21 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>RadixSortOperations.tt</DependentUpon>
     </None>
+    <None Include="Runtime\Cuda\API\CuRandNativeMethods.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CuRandNativeMethods.tt</DependentUpon>
+    </None>
   </ItemGroup>
 
   <PropertyGroup>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="T4.Build" Version="0.2.0" PrivateAssets="All" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\ILGPU\Src\ILGPU\ILGPU.csproj" />
@@ -88,10 +101,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>PTXContext.Generated.cs</LastGenOutput>
     </None>
-    <None Update="PTX\PTXMath.Round.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>PTXMath.Round.cs</LastGenOutput>
-    </None>
     <None Update="RadixSortOperations.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>RadixSortOperations.cs</LastGenOutput>
@@ -108,9 +117,13 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CuBlasMethodsLevel3.cs</LastGenOutput>
     </None>
-    <None Update="Runtime\Cuda\CuBlasNativeMethods.tt">
+    <None Update="Runtime\Cuda\API\CuBlasNativeMethods.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CuBlasNativeMethods.cs</LastGenOutput>
+    </None>
+    <None Update="Runtime\Cuda\API\CuRandNativeMethods.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CuRandNativeMethods.cs</LastGenOutput>
     </None>
     <None Update="ScanReduceOperations.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -142,6 +155,10 @@
     <None Update="XMath\Cordic.Trig.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Cordic.Trig.cs</LastGenOutput>
+    </None>
+    <None Update="XMath\RoundingModes.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>RoundingModes.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
@@ -181,11 +198,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PTXContext.Generated.tt</DependentUpon>
     </Compile>
-    <Compile Update="PTX\PTXMath.Round.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>PTXMath.Round.tt</DependentUpon>
-    </Compile>
     <Compile Update="RadixSortOperations.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -211,10 +223,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>CuBlasMethodsLevel3.tt</DependentUpon>
     </Compile>
-    <Compile Update="Runtime\Cuda\CuBlasNativeMethods.cs">
+    <Compile Update="Runtime\Cuda\API\CuBlasNativeMethods.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>CuBlasNativeMethods.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Runtime\Cuda\API\CuRandNativeMethods.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CuRandNativeMethods.tt</DependentUpon>
     </Compile>
     <Compile Update="ScanReduceOperations.cs">
       <DesignTime>True</DesignTime>
@@ -251,6 +268,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Cordic.Trig.tt</DependentUpon>
     </Compile>
+    <Compile Update="XMath\RoundingModes.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RoundingModes.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -265,5 +287,4 @@
   </ItemGroup>
 
   <Import Project="Properties\ILGPU.Algorithms.nuspec.targets" />
-  <Import Project="..\..\ILGPU\Src\TextTransform.targets" />
 </Project>

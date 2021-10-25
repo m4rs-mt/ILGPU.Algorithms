@@ -10,24 +10,24 @@
 // ---------------------------------------------------------------------------------------
 
 <#@ template debug="false" hostspecific="false" language="C#" #>
-<#@ include file="CuBlasMappings.ttinclude"#>
+<#@ include file="../CuBlasMappings.ttinclude"#>
 <#@ assembly name="System.Core" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 <#
-var apis = new (string, bool)[]
+var apis = new (string, string, string, string)[]
 {
-    ("CuBlasAPI",      false),
+    ("CuBlasAPI",             null,                 null,      null),
 
-    ("WindowsAPI_V10", true),
-    ("LinuxAPI_V10",   true),
-    ("MacOSAPI_V10",   true),
-    
-    ("WindowsAPI_V11", true),
-    ("LinuxAPI_V11",   true),
-    ("MacOSAPI_V11",   true),
+    ("CuBlas_WindowsAPI_V10", "cublas64_10",        "Windows", "V10"),
+    ("CuBlas_LinuxAPI_V10",   "libcublas.so.10",    "Linux",   "V10"),
+    ("CuBlas_MacOSAPI_V10",   "libcublas.10.dylib", "OSX",     "V10"),
+
+    ("CuBlas_WindowsAPI_V11", "cublas64_11",        "Windows", "V11"),
+    ("CuBlas_LinuxAPI_V11",   "libcublas.so.11",    "Linux",   "V11"),
+    ("CuBlas_MacOSAPI_V11",   "libcublas.11.dylib", "OSX",     "V11"),
 };
 #>
 
@@ -37,65 +37,104 @@ using System.Runtime.InteropServices;
 // disable: max_line_length
 #pragma warning disable IDE1006 // Naming Styles
 #pragma warning disable CA1707 // Identifiers should not contain underscores
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-#pragma warning disable CS3001 // Argument type is not CLS-compliant
 
 namespace ILGPU.Runtime.Cuda.API
 {
-<# foreach (var (className, define) in apis) { #>
+    partial class CuBlasAPI
+    {
+        private static CuBlasAPI CreateInternal(CuBlasAPIVersion version)
+        {
+<# foreach (var (className, _, platform, version) in apis.Skip(1)) { #>
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.<#= platform #>) &&
+                version == CuBlasAPIVersion.<#= version #>)
+            {
+                return new <#= className #>();
+            }
+<# } #>
+            return null;
+        }
+    }
+
+<# foreach (var (className, libName, _, _) in apis) { #>
+<#      bool define = libName != null; #>
 
     internal unsafe partial class <#= className #>
+<#      if (define) { #>
+        : <#= apis[0].Item1 #>
+<#      } #>
     {
+<#      if (define) { #>
+        #region Constants
+
+        /// <summary>
+        /// Represents the cuBlas library name.
+        /// </summary>
+        public const string LibName = "<#= libName #>";
+
+        #endregion
+
+<# } #>
         #region Context
 
 <#      if (define) { #>
 
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus cublasCreate_v2(out IntPtr handle);
 
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus cublasGetVersion_v2(
             IntPtr handle,
             out int version);
 
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus cublasDestroy_v2(IntPtr handle);
 
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus cublasGetStream_v2(
             IntPtr handle,
             out IntPtr stream);
 
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus cublasSetStream_v2(
             IntPtr handle,
             IntPtr stream);
 
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus cublasGetPointerMode_v2(
             IntPtr handle,
             out CuBlasPointerMode mode);
 
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus cublasSetPointerMode_v2(
             IntPtr handle,
             CuBlasPointerMode mode);
 
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus cublasGetAtomicsMode(
             IntPtr handle,
             out CuBlasAtomicsMode mode);
 
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus cublasSetAtomicsMode(
             IntPtr handle,
             CuBlasAtomicsMode mode);
 
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus cublasGetMathMode(
             IntPtr handle,
             out CuBlasMathMode mode);
 
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus cublasSetMathMode(
             IntPtr handle,
@@ -145,30 +184,6 @@ namespace ILGPU.Runtime.Cuda.API
         public override CuBlasStatus SetMathMode(IntPtr handle, CuBlasMathMode mode)  =>
             cublasSetMathMode(handle, mode);
 
-<#      } else { #>
-
-        public abstract CuBlasStatus Create(out IntPtr handle);
-
-        public abstract CuBlasStatus GetVersion(IntPtr handle, out int version);
-
-        public abstract CuBlasStatus Free(IntPtr handle);
-
-        public abstract CuBlasStatus GetStream(IntPtr handle, out IntPtr stream);
-
-        public abstract CuBlasStatus SetStream(IntPtr handle, IntPtr stream);
-
-        public abstract CuBlasStatus GetPointerMode(IntPtr handle, out CuBlasPointerMode mode);
-
-        public abstract CuBlasStatus SetPointerMode(IntPtr handle, CuBlasPointerMode mode);
-
-        public abstract CuBlasStatus GetAtomicsMode(IntPtr handle, out CuBlasAtomicsMode mode);
-
-        public abstract CuBlasStatus SetAtomicsMode(IntPtr handle, CuBlasAtomicsMode mode);
-
-        public abstract CuBlasStatus GetMathMode(IntPtr handle, out CuBlasMathMode mode);
-
-        public abstract CuBlasStatus SetMathMode(IntPtr handle, CuBlasMathMode mode);
-
 <#      } #>
 
         #endregion
@@ -178,6 +193,7 @@ namespace ILGPU.Runtime.Cuda.API
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Amax, Amin, Asum, Nrm2)) { #>
 <#          if (define) { #>
 
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -209,6 +225,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Axpy)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -245,6 +262,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Dot, RotM)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -275,6 +293,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Rot)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -308,6 +327,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(RotG)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -338,6 +358,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Scal)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -368,6 +389,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Swap)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -399,6 +421,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Gbmv)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -449,6 +472,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Gemv)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -495,6 +519,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Ger)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -534,6 +559,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Sbmv)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -580,6 +606,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Spmv)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -626,6 +653,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Spr)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -664,6 +692,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Spr2)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -706,6 +735,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Symv)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -752,6 +782,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Syr)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -790,6 +821,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Syr2)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -832,6 +864,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Tbmv, Tbsv)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -873,13 +906,14 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Tpmv, Tpsv)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
             CuBlasFillMode uplo,
             CuBlasOperation trans,
             CuBlasDiagType diag,
-            int n, 
+            int n,
             void* ap,
             void* x, int incx);
 
@@ -888,7 +922,7 @@ namespace ILGPU.Runtime.Cuda.API
             CuBlasFillMode uplo,
             CuBlasOperation trans,
             CuBlasDiagType diag,
-            int n, 
+            int n,
             void* ap,
             void* x, int incx) =>
             <#= nativeFunc #>(
@@ -905,7 +939,7 @@ namespace ILGPU.Runtime.Cuda.API
             CuBlasFillMode uplo,
             CuBlasOperation trans,
             CuBlasDiagType diag,
-            int n, 
+            int n,
             void* ap,
             void* x, int incx);
 
@@ -914,13 +948,14 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Trmv, Trsv)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
             CuBlasFillMode uplo,
             CuBlasOperation trans,
             CuBlasDiagType diag,
-            int n, 
+            int n,
             void* a, int lda,
             void* x, int incx);
 
@@ -929,7 +964,7 @@ namespace ILGPU.Runtime.Cuda.API
             CuBlasFillMode uplo,
             CuBlasOperation trans,
             CuBlasDiagType diag,
-            int n, 
+            int n,
             void* a, int lda,
             void* x, int incx) =>
             <#= nativeFunc #>(
@@ -946,7 +981,7 @@ namespace ILGPU.Runtime.Cuda.API
             CuBlasFillMode uplo,
             CuBlasOperation trans,
             CuBlasDiagType diag,
-            int n, 
+            int n,
             void* a, int lda,
             void* x, int incx);
 
@@ -959,6 +994,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Gemm)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -1009,6 +1045,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Symm)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -1059,6 +1096,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Syrk)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -1105,6 +1143,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Syr2k, Syrkx)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -1155,6 +1194,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Trmm)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -1208,6 +1248,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Trsm)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -1261,6 +1302,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Geam)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -1311,6 +1353,7 @@ namespace ILGPU.Runtime.Cuda.API
 
 <#      foreach (var (func, nativeFunc) in GetBlasEntries(Dgmm)) { #>
 <#          if (define) { #>
+        [DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
         [DllImport(LibName)]
         private static extern CuBlasStatus <#= nativeFunc #>(
             IntPtr handle,
@@ -1352,7 +1395,5 @@ namespace ILGPU.Runtime.Cuda.API
 <# } #>
 }
 
-#pragma warning restore CS3001 // Argument type is not CLS-compliant
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 #pragma warning restore CA1707 // Identifiers should not contain underscores
 #pragma warning restore IDE1006 // Naming Styles

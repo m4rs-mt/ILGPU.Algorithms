@@ -68,13 +68,31 @@ namespace ILGPU.Algorithms.Resources {
                 return ResourceManager.GetString("NotSupportedArrayView64", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not supported cuRAND API platform..
+        /// </summary>
+        internal static string NotSupportedCuRandAPI {
+            get {
+                return ResourceManager.GetString("NotSupportedCuRandAPI", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to The allocation of type &apos;{0}&apos; is not correctly aligned. Requires &apos;{1}&apos; byte alignment but was allocated at byte offset &apos;{2}&apos;..
         /// </summary>
         internal static string TempViewManagerUnalignedAllocation {
             get {
                 return ResourceManager.GetString("TempViewManagerUnalignedAllocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} view is larger than the {1} view..
+        /// </summary>
+        internal static string ViewOutOfRange {
+            get {
+                return ResourceManager.GetString("ViewOutOfRange", resourceCulture);
             }
         }
     }
