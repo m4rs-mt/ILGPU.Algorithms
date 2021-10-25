@@ -1,4 +1,9 @@
-# ILGPU.Algorithms
+# ILGPU.Algorithms (! MOVED !)
+
+Please note that the ILGPU.Algorithms library has been merged with the ILGPU repository.
+Refer to the ILGPU repository (https://github.com/m4rs-mt/ILGPU) for updates and new releases.
+
+# ILGPU.Algorithms Library (pre 1.0 Version)
 
 Real-world applications typically require a standard library and a set of standard algorithms that "simply work".
 The ILGPU Algorithms library meets these requirements by offering a set of auxiliary functions and high-level algorithms (e.g. sorting or prefix sum).
@@ -30,6 +35,6 @@ LICENSE-3RD-PARTY.txt.
 
 # Credits
 
-This work was supported by the [Deutsches Forschungszentrum für Künstliche Intelligenz GmbH](https://www.dfki.de/) (DFKI; German Research Center for Artificial Intelligence).
+This work was supported by the [Deutsches Forschungszentrum fï¿½r Kï¿½nstliche Intelligenz GmbH](https://www.dfki.de/) (DFKI; German Research Center for Artificial Intelligence).
 <p><img src="https://www.dfki.de/fileadmin/user_upload/DFKI/Medien/Logos/Logos_DFKI/DFKI_Logo.png" alt="DFKI Logo" width="250"></p>
 
